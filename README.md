@@ -1,4 +1,6 @@
-# [Simple things for simple tasks.](https://krikmo.github.io)
+# [Things](https://krikmo.github.io)
+
+Simple things for simple tasks.
 
 * **"Random" Password Generator** is exactly what it sounds. The special thing is that they are 23 characters long and alphanumeric. Nice.
 * **The Coin Flipper** is *also* exactly what it sounds.
