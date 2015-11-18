@@ -2,8 +2,8 @@
 
 Simple things for simple tasks.
 
-* **"Random" Password Generator** is exactly what it sounds. The special thing is that they are 23 characters long and alphanumeric. Nice.
-* **The Coin Flipper** is *also* exactly what it sounds.
+* [**"Random" Password Generator**](https://krikmo.github.io/pass.html) is exactly what it sounds. The special thing is that they are 23 characters long and alphanumeric. Nice.
+* [**The Coin Flipper**](https://krikmo.github.io/flip.html) is *also* exactly what it sounds.
 
 # License
 
