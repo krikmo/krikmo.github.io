@@ -6,6 +6,6 @@ function timeStamp() {
             time[i] = "0" + time[i];
         }
     }
-    return time.join(":") /* + " " + suffix*/;
+    return time.join(":");
 }
 document.getElementById("time").innerHTML = timeStamp();
