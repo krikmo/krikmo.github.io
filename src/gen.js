@@ -17,5 +17,4 @@ document.getElementById("num").innerHTML = makepass();
 
 if (text === "") {
     document.getElementById("num").innerHTML = "To generate your password, you need to format the URL like this: \"pass.html?len=23\", where 23 is the length of your password.";
-} else {
 }
