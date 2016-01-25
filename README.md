@@ -8,6 +8,6 @@ Simple things for simple tasks.
 
 # License
 
-Copyright (c) 2015
+Copyright (c) 2016
 
 This project and its contents are open source under the MIT license.
