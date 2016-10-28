@@ -9,3 +9,5 @@ function timeStamp() {
     return time.join(":");
 }
 document.getElementById("time").innerHTML = timeStamp();
+
+
