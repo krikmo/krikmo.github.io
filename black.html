@@ -11,12 +11,13 @@
         window.addEventListener("DOMContentLoaded", function () {
             const customUrl = decodeURIComponent(window.location.hash.substr(1));
             if (customUrl) {
-                document.getElementById("url").textContent = customUrl.replace(/htt/g, "about:blank#htt");
+                document.getElementById("url").textContent = customUrl;
+                document.getElementById("url").setAttribute("href", customUrl);
             }
         });
     </script>
 </head>
 <body>
-    <p id="url"></p>
+    <a id="url" style="text-decoration: none; color: white;"></a>
 </body>
 </html>
