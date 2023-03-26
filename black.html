@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+    </style>
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            const customUrl = decodeURIComponent(window.location.hash.substr(1));
+            if (customUrl) {
+                document.getElementById("url").textContent = customUrl.replace(/htt/g, "about:blank#htt");
+            }
+        });
+    </script>
+</head>
+<body>
+    <p id="url"></p>
+</body>
+</html>
