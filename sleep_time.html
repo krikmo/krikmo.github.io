@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Time</title>
+    <style>
+        body {
+            background-color: #4A4A4A;
+            font-family: Arial, sans-serif;
+            color: #FFFFFF;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        input[type="text"] {
+            font-size: 1.5rem;
+            width: 50%;
+            max-width: 300px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            font-size: 1.25rem;
+            padding: 10px 15px;
+            margin: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #7A7A7A;
+            color: #FFFFFF;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #9A9A9A;
+        }
+        .toggle-btn {
+            background-color: #1E4B7E;
+        }
+        .toggle-btn:hover {
+            background-color: #3A6EA3;
+        }
+        #result {
+            font-size: 2rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sleep Time</h1>
+    <input type="text" id="timeInput" placeholder="HH:MM">
+    <button id="currentBtn">Current Time</button>
+    <br>
+    <button id="toggleBtn" class="toggle-btn">Toggle</button>
+    <div id="buttons"></div>
+    <div id="result"></div>
+<script>
+    let mode = localStorage.getItem('mode') || 'addHours';
+    const buttonsDiv = document.getElementById('buttons');
+    updateButtons();
+
+    document.getElementById('currentBtn').addEventListener('click', function () {
+        let currentTime = new Date();
+        let hours = currentTime.getHours().toString().padStart(2, '0');
+        let minutes = currentTime.getMinutes().toString().padStart(2, '0');
+        document.getElementById('timeInput').value = `${hours}:${minutes}`;
+    });
+
+    document.getElementById('toggleBtn').addEventListener('click', function () {
+        mode = mode === 'addHours' ? 'futureTime' : 'addHours';
+        localStorage.setItem('mode', mode);
+        updateButtons();
+    });
+
+    function updateButtons() {
+        let buttonValues = mode === 'addHours' ? [5, 6, 7, 8] : [7, 8, 9, 10, 11, 12];
+        let onClickFunction = mode === 'addHours' ? 'addHours' : 'calculateDifference';
+        buttonsDiv.innerHTML = buttonValues.map(value => `<button onclick="${onClickFunction}(${value})">${value}h</button>`).join('');
+    }
+
+    function addHours(hoursToAdd) {
+        let timeStr = document.getElementById('timeInput').value;
+        let timeParts = timeStr.split(':');
+        if (timeParts.length !== 2) {
+            alert('Please enter a valid time in HH:MM format.');
+            return;
+        }
+
+        let inputDate = new Date();
+        inputDate.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
+
+        let resultDate
+    = new Date(inputDate.getTime() + hoursToAdd * 60 * 60 * 1000);
+        let resultHours = resultDate.getHours().toString().padStart(2, '0');
+        let resultMinutes = resultDate.getMinutes().toString().padStart(2, '0');
+
+        document.getElementById('result').innerHTML = `${resultHours}:${resultMinutes}`;
+    }
+
+function calculateDifference(targetHour) {
+    let timeStr = document.getElementById('timeInput').value;
+    let timeParts = timeStr.split(':');
+    if (timeParts.length !== 2) {
+        alert('Please enter a valid time in HH:MM format.');
+        return;
+    }
+
+    let inputDate = new Date();
+    inputDate.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
+
+    let targetDate = new Date(inputDate);
+    targetDate.setHours(targetHour, 0);
+
+    if (targetDate < inputDate) {
+        targetDate.setDate(targetDate.getDate() + 1);
+    }
+
+    let timeDifference = targetDate - inputDate;
+    let hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
+    let minutesDifference = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+    // Pad minutesDifference with a leading zero if it's a single digit
+    minutesDifference = minutesDifference.toString().padStart(2, '0');
+
+    document.getElementById('result').innerHTML = `${hoursDifference}:${minutesDifference}`;
+}
+
+</script>
+</body>
+</html>
