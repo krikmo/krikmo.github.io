@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timezone Converter</title>
+<style>
+    body {
+        background-color: #808080;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+    input[type="text"] {
+        width: 80%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        font-size: 18px;
+        text-align: center;
+        outline: none;
+    }
+    .result {
+        margin-top: 1rem;
+    }
+    button {
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        outline: none;
+    }
+    table {
+        width: 80%;
+        text-align: center;
+        margin-top: 1rem;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid white;
+        padding: 8px;
+    }
+</style>
+<script>
+function convertTime() {
+    const input = document.getElementById("inputTime").value.trim();
+    const timePattern = /^(\d{1,2}):(\d{2})\s([A-Za-z]{2,3})$/;
+    const match = input.match(timePattern);
+
+    if (!match) {
+        document.getElementById("result").innerHTML = "Invalid input";
+        return;
+    }
+
+    const hour = parseInt(match[1], 10);
+    const minute = parseInt(match[2], 10);
+    const timezone = match[3].toUpperCase();
+
+const timezoneOffset = {
+    'PT': 4,
+    'PST': 5,
+    'PDT': 4,
+    'ET': 2,
+    'EST': 3,
+    'EDT': 2,
+    'CT': 3,
+    'CST': 4,
+    'CDT': 3,
+};
+
+
+    const offset = timezoneOffset[timezone];
+
+    if (typeof offset === 'undefined') {
+        document.getElementById("result").innerHTML = "Invalid timezone";
+        return;
+    }
+
+    let brtHour = hour + offset;
+    if (brtHour >= 24) {
+        brtHour -= 24;
+    }
+
+    const brtTime = `${brtHour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} BRT`;
+
+    document.getElementById("result").innerHTML = brtTime;
+}
+</script>
+</head>
+<body>
+<div class="container">
+    <input type="text" id="inputTime" placeholder="Enter time (ex: 18:15 PT)">
+    <button id="convertBtn" onclick="convertTime()">Convert</button>
+    <div class="result" id="result"></div>
+    <table>
+        <thead>
+            <tr>
+                <th>State</th>
+                <th>Standard</th>
+                <th>Daylight</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>California</td>
+                <td>Nov-Mar (PST)</td>
+                <td>Mar-Nov (PDT)</td>
+            </tr
+            <tr>
+                <td>New York</td>
+                <td>Nov-Mar (EST)</td>
+                <td>Mar-Nov (EDT)</td>
+            </tr>
+            <tr>
+                <td>Texas</td>
+                <td>Nov-Mar (CST)</td>
+                <td>Mar-Nov (CDT)</td>
+            </tr>
+            <tr>
+                <td>DC</td>
+                <td>Nov-Mar (EST)</td>
+                <td>Mar-Nov (EDT)</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
