@@ -23,12 +23,13 @@
                 document.getElementById("title").textContent = customTitle;
                 document.getElementById("url").textContent = customUrl;
                 document.getElementById("url").setAttribute("href", customUrl);
+                document.title = customTitle;
             }
         });
     </script>
 </head>
 <body>
-    <p id="title" style="text-decoration: none; color:white;"></p>
+    <p id="title" style="text-decoration: none; color: white;"></p>
     <a id="url" style="text-decoration: none; color: white;"></a>
 </body>
 </html>
