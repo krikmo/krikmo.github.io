@@ -10,15 +10,19 @@
     </style>
     <script>
         window.addEventListener("DOMContentLoaded", function () {
-            const customUrl = decodeURIComponent(window.location.hash.substr(1));
-            if (customUrl) {
+            const customData = window.location.hash.substr(1).split('~');
+            if (customData.length == 2) {
+                const customUrl = decodeURIComponent(customData[0]);
+                const customTitle = decodeURIComponent(customData[1]);
                 document.getElementById("url").textContent = customUrl;
                 document.getElementById("url").setAttribute("href", customUrl);
+                document.getElementById("title").textContent = customTitle;
             }
         });
     </script>
 </head>
 <body>
+    <h1 id="title"></h1>
     <a id="url" style="text-decoration: none; color: white;"></a>
 </body>
 </html>
