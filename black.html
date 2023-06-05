@@ -10,7 +10,7 @@
     </style>
     <script>
         window.addEventListener("DOMContentLoaded", function () {
-            const customData = decodeURIComponent(window.location.hash.substr(1)).split('?');
+            const customData = decodeURIComponent(window.location.hash.substr(1)).split('?|');
             let customUrl, customTitle;
             for (let i = 0; i < customData.length; i++) {
                 if (customData[i].startsWith("url:")) {
@@ -20,16 +20,15 @@
                 }
             }
             if (customUrl && customTitle) {
+                document.getElementById("title").textContent = customTitle;
                 document.getElementById("url").textContent = customUrl;
                 document.getElementById("url").setAttribute("href", customUrl);
-                document.getElementById("title").textContent = customTitle;
             }
         });
     </script>
-    
 </head>
 <body>
-    <h1 id="title"></h1>
+    <p id="title" style="text-decoration: none; color:white;"></p>
     <a id="url" style="text-decoration: none; color: white;"></a>
 </body>
 </html>
