@@ -19,6 +19,9 @@
                     customTitle = customData[i].substr(6);
                 }
             }
+            if (!customTitle && customUrl) {
+                customTitle = customUrl;
+            }
             if (customUrl && customTitle) {
                 document.getElementById("title").textContent = customTitle;
                 document.getElementById("url").textContent = customUrl;
