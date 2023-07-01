@@ -8,6 +8,29 @@
             color: #fff;
             font-size: 150%;
         }
+
+        #url-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 62%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+        }
+
+        #url-input {
+            color: #fff;
+            background-color: #000;
+            border: none;
+            border-bottom: 2px solid #fff;
+            font-size: 1em;
+            width: 50%;
+        }
+        
+        a {
+            text-decoration: none;
+            color: white;
+        }
     </style>
     <script>
         window.addEventListener("DOMContentLoaded", function () {
@@ -28,13 +51,27 @@
                 document.getElementById("url").textContent = customUrl;
                 document.getElementById("url").setAttribute("href", customUrl);
                 document.title = customTitle;
+            } else {
+                document.getElementById("url-form").style.display = "block";
             }
         });
+
+        function submitUrl() {
+            const url = document.getElementById("url-input").value;
+            document.getElementById("title").textContent = url;
+            document.getElementById("url").textContent = url;
+            document.getElementById("url").setAttribute("href", url);
+            document.title = url;
+            document.getElementById("url-form").style.display = "none";
+            window.location.hash = `url:${encodeURIComponent(url)}?|title:`;
+        }
     </script>
 </head>
 <body>
-
     <p id="title" style="text-decoration: none; color: white; margin-bottom: 1em;"></p>
     <a id="url" style="text-decoration: none; color: white;"></a>
+    <form id="url-form" onsubmit="event.preventDefault(); submitUrl();">
+        <input id="url-input" type="url" required>
+    </form>
 </body>
 </html>
