@@ -32,40 +32,59 @@
             color: white;
         }
     </style>
-    <script>
-        window.addEventListener("DOMContentLoaded", function () {
-            const customData = decodeURIComponent(window.location.hash.substr(1)).split('?|');
-            let customUrl, customTitle;
-            for (let i = 0; i < customData.length; i++) {
-                if (customData[i].startsWith("url:")) {
-                    customUrl = customData[i].substr(4);
-                } else if (customData[i].startsWith("title:")) {
-                    customTitle = customData[i].substr(6);
-                }
-            }
-            if (!customTitle && customUrl) {
+<script>
+    window.addEventListener("DOMContentLoaded", function () {
+        function updateHashAndTitle(customUrl, customTitle) {
+            if (!customTitle) {
                 customTitle = customUrl;
             }
-            if (customUrl && customTitle) {
-                document.getElementById("title").textContent = customTitle;
-                document.getElementById("url").textContent = customUrl;
-                document.getElementById("url").setAttribute("href", customUrl);
-                document.title = customTitle;
-            } else {
-                document.getElementById("url-form").style.display = "block";
-            }
-        });
 
-        function submitUrl() {
-            const url = document.getElementById("url-input").value;
-            document.getElementById("title").textContent = url;
-            document.getElementById("url").textContent = url;
-            document.getElementById("url").setAttribute("href", url);
-            document.title = url;
-            document.getElementById("url-form").style.display = "none";
-            window.location.hash = `url:${encodeURIComponent(url)}?|title:`;
+            window.location.hash = `title:${encodeURIComponent(customTitle)}?|url:${encodeURIComponent(customUrl)}`;
+
+            document.title = customTitle;
+            document.getElementById("title").textContent = customTitle;
         }
-    </script>
+
+        const customData = decodeURIComponent(window.location.hash.substr(1)).split('?|');
+        let customUrl, customTitle;
+
+        for (let i = 0; i < customData.length; i++) {
+            if (customData[i].startsWith("url:")) {
+                customUrl = customData[i].substr(4);
+            } else if (customData[i].startsWith("title:")) {
+                customTitle = customData[i].substr(6);
+            }
+        }
+
+        if (!customTitle && customUrl) {
+            customTitle = customUrl;
+        }
+
+        if (customUrl && customTitle) {
+            document.getElementById("title").textContent = customTitle;
+            document.getElementById("url").textContent = customUrl;
+            document.getElementById("url").setAttribute("href", customUrl);
+            document.title = customTitle;
+        } else {
+            document.getElementById("url-form").style.display = "block";
+        }
+
+        document.getElementById("title").addEventListener("dblclick", function() {
+            const newTitle = prompt("Enter a new title:", this.textContent);
+            updateHashAndTitle(customUrl, newTitle);
+        });
+    });
+
+    function submitUrl() {
+        const url = document.getElementById("url-input").value;
+        document.getElementById("title").textContent = url;
+        document.getElementById("url").textContent = url;
+        document.getElementById("url").setAttribute("href", url);
+        document.title = url;
+        document.getElementById("url-form").style.display = "none";
+        window.location.hash = `title:${encodeURIComponent(url)}?|url:${encodeURIComponent(url)}`;
+    }
+</script>
 </head>
 <body>
     <p id="title" style="text-decoration: none; color: white; margin-bottom: 1em;"></p>
