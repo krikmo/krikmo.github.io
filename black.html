@@ -8,7 +8,6 @@
             color: #fff;
             font-size: 150%;
         }
-
         #url-form {
             display: none;
             position: fixed;
@@ -17,7 +16,6 @@
             transform: translate(-50%, -50%);
             width: 50%;
         }
-
         #url-input {
             color: #fff;
             background-color: #000;
@@ -26,7 +24,6 @@
             font-size: 1em;
             width: 50%;
         }
-        
         a {
             text-decoration: none;
             color: white;
@@ -35,12 +32,11 @@
 <script>
     window.addEventListener("DOMContentLoaded", function () {
         function updateHashAndTitle(customUrl, customTitle) {
-            if (!customTitle) {
+            if (!customTitle || customTitle.trim() === '') {
                 customTitle = customUrl;
             }
-
+            if (customTitle === null) return;
             window.location.hash = `title:${encodeURIComponent(customTitle)}?|url:${encodeURIComponent(customUrl)}`;
-
             document.title = customTitle;
             document.getElementById("title").textContent = customTitle;
         }
@@ -55,8 +51,8 @@
                 customTitle = customData[i].substr(6);
             }
         }
-
-        if (!customTitle && customUrl) {
+        
+        if (!customTitle || customTitle.trim() === '') {
             customTitle = customUrl;
         }
 
@@ -71,18 +67,22 @@
 
         document.getElementById("title").addEventListener("dblclick", function() {
             const newTitle = prompt("Enter a new title:", this.textContent);
-            updateHashAndTitle(customUrl, newTitle);
+            if (newTitle !== null) {
+                updateHashAndTitle(customUrl, newTitle);
+            }
         });
     });
 
     function submitUrl() {
         const url = document.getElementById("url-input").value;
-        document.getElementById("title").textContent = url;
+        const titleElem = document.getElementById("title");
+        const newTitle = titleElem.textContent || url;
+        titleElem.textContent = newTitle;
         document.getElementById("url").textContent = url;
         document.getElementById("url").setAttribute("href", url);
-        document.title = url;
+        document.title = newTitle;
         document.getElementById("url-form").style.display = "none";
-        window.location.hash = `title:${encodeURIComponent(url)}?|url:${encodeURIComponent(url)}`;
+        window.location.hash = `title:${encodeURIComponent(newTitle)}?|url:${encodeURIComponent(url)}`;
     }
 </script>
 </head>
