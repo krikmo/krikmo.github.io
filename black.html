@@ -8,7 +8,9 @@
             color: #fff;
             font-size: 150%;
         }
-        #url-form {
+
+        /* Style for input-page */
+        #input-form {
             display: none;
             position: fixed;
             top: 50%;
@@ -16,7 +18,9 @@
             transform: translate(-50%, -50%);
             width: 50%;
         }
-        #url-input {
+
+        /* Style for input-box on input-page */
+        #input-box {
             color: #fff;
             background-color: #000;
             border: none;
@@ -24,73 +28,108 @@
             font-size: 1em;
             width: 50%;
         }
+
+        /* Style for anchor on load-page */
         a {
             text-decoration: none;
             color: white;
         }
     </style>
-<script>
-    window.addEventListener("DOMContentLoaded", function () {
-        function updateHashAndTitle(customUrl, customTitle) {
-            if (!customTitle || customTitle.trim() === '') {
-                customTitle = customUrl;
-            }
-            if (customTitle === null) return;
-            window.location.hash = `title:${encodeURIComponent(customTitle)}?|url:${encodeURIComponent(customUrl)}`;
-            document.title = customTitle;
-            document.getElementById("title").textContent = customTitle;
-        }
-
-        const customData = decodeURIComponent(window.location.hash.substr(1)).split('?|');
-        let customUrl, customTitle;
-
-        for (let i = 0; i < customData.length; i++) {
-            if (customData[i].startsWith("url:")) {
-                customUrl = customData[i].substr(4);
-            } else if (customData[i].startsWith("title:")) {
-                customTitle = customData[i].substr(6);
-            }
-        }
-        
-        if (!customTitle || customTitle.trim() === '') {
-            customTitle = customUrl;
-        }
-
-        if (customUrl && customTitle) {
-            document.getElementById("title").textContent = customTitle;
-            document.getElementById("url").textContent = customUrl;
-            document.getElementById("url").setAttribute("href", customUrl);
-            document.title = customTitle;
-        } else {
-            document.getElementById("url-form").style.display = "block";
-        }
-
-        document.getElementById("title").addEventListener("dblclick", function() {
-            const newTitle = prompt("Enter a new title:", this.textContent);
-            if (newTitle !== null) {
-                updateHashAndTitle(customUrl, newTitle);
-            }
-        });
-    });
-
-    function submitUrl() {
-        const url = document.getElementById("url-input").value;
-        const titleElem = document.getElementById("title");
-        const newTitle = titleElem.textContent || url;
-        titleElem.textContent = newTitle;
-        document.getElementById("url").textContent = url;
-        document.getElementById("url").setAttribute("href", url);
-        document.title = newTitle;
-        document.getElementById("url-form").style.display = "none";
-        window.location.hash = `title:${encodeURIComponent(newTitle)}?|url:${encodeURIComponent(url)}`;
-    }
-</script>
 </head>
 <body>
-    <p id="title" style="text-decoration: none; color: white; margin-bottom: 1em;"></p>
-    <a id="url" style="text-decoration: none; color: white;"></a>
-    <form id="url-form" onsubmit="event.preventDefault(); submitUrl();">
-        <input id="url-input" type="url" required>
+    <!-- Input-Page Interface -->
+    <form id="input-form" onsubmit="event.preventDefault(); submitFromInput();">
+        <input id="input-box" type="url" required>
     </form>
+
+    <!-- Load-Page Interface -->
+    <p id="title"></p>
+    <a id="url"></a>
+
+    <script>
+        // Page Initialization
+        window.addEventListener("DOMContentLoaded", function () {
+            const hashExists = window.location.hash;
+            if (hashExists) {
+                loadFromHash();
+            } else {
+                document.getElementById("input-form").style.display = "block";
+            }
+            
+            // Capture Enter key for submission
+            document.getElementById("input-form").addEventListener("submit", function(event) {
+                event.preventDefault();
+                submitFromInput();
+            });
+
+            // Load content from URL hash
+            function loadFromHash() {
+                const data = decodeURIComponent(window.location.hash.substr(1)).split('?|');
+                let url = null, title = null;
+                for (const entry of data) {
+                    if (entry.startsWith("url:")) url = entry.substr(4);
+                    else if (entry.startsWith("title:")) title = entry.substr(6);
+                }
+                updateFromHash(`url:${url}?|title:${title}`);
+            }
+
+            // Update URL hash and displayed title and URL
+            function updateFromHash(data) {
+                if (!data || data === 'url:') {
+                    window.location.href = window.location.href.split('#')[0];
+                    return;
+                }
+                window.location.hash = data;
+                const parsedData = decodeURIComponent(data).split('?|');
+                let url = null, title = null;
+                for (const entry of parsedData) {
+                    if (entry.startsWith("url:")) url = entry.substr(4);
+                    else if (entry.startsWith("title:")) title = entry.substr(6);
+                }
+                
+                // Make the title same as the URL if it's empty, null, or falsy.
+                if (!title || title === null || title.trim() === '') title = url;
+                
+                document.title = title;
+                document.getElementById("title").textContent = title;
+                document.getElementById("url").textContent = url;
+                document.getElementById("url").setAttribute("href", url);
+            }
+
+            // Submit URL from the initial load interface
+            function submitFromInput() {
+                const url = document.getElementById("input-box").value;
+                if (url) {
+                    updateFromHash(`url:${url}?|title:${url}`);
+                    document.getElementById("input-form").style.display = "none";
+                }
+            }
+
+            // Double-click Title for Title Prompt
+            document.getElementById("title").addEventListener("dblclick", function() {
+                let newTitle = prompt("New Title?", this.textContent);
+                if (newTitle === null || newTitle.trim() === '') newTitle = document.getElementById("url").textContent;
+                const data = `url:${document.getElementById("url").textContent}?|title:${newTitle}`;
+                updateFromHash(data);
+            });
+
+            // Double-click Body for URL Prompt
+            document.addEventListener("dblclick", function(event) {
+                if (event.target.id !== "title") {
+                    if (window.location.hash) {
+                        const newUrl = prompt("New URL?", "");
+                        if (newUrl) {
+                            updateFromHash(`url:${newUrl}?|title:${newUrl}`);
+                        } else {
+                            updateFromHash('url:');
+                        }
+                    } else {
+                        const inputValue = document.getElementById("input-box").value;
+                        if (inputValue) submitFromInput();
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
