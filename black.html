@@ -108,7 +108,7 @@
             // Double-click Title for Title Prompt
             document.getElementById("title").addEventListener("dblclick", function() {
                 let newTitle = prompt("New Title?", this.textContent);
-                if (newTitle === null || newTitle.trim() === '') newTitle = document.getElementById("url").textContent;
+                if (newTitle.trim() === '') newTitle = document.getElementById("url").textContent;
                 const data = `url:${document.getElementById("url").textContent}?|title:${newTitle}`;
                 updateFromHash(data);
             });
