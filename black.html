@@ -49,21 +49,19 @@
     <script>
         // Page Initialization
         window.addEventListener("DOMContentLoaded", function () {
-            // Initial Page Load
             const hashExists = window.location.hash;
             if (hashExists) {
                 loadFromHash();
             } else {
                 document.getElementById("input-form").style.display = "block";
             }
-            
-            // Capture Enter key for submission
+
             document.getElementById("input-form").addEventListener("submit", function(event) {
                 event.preventDefault();
                 submitFromInput();
             });
-            
-            // Load content from URL hash
+
+            // Load content from URL hash without altering the URL
             function loadFromHash() {
                 const data = decodeURIComponent(window.location.hash.substr(1)).split('?|');
                 let url = null, title = null;
@@ -71,7 +69,7 @@
                     if (entry.startsWith("url:")) url = entry.substr(4);
                     else if (entry.startsWith("title:")) title = entry.substr(6);
                 }
-                updateFromHash(`url:${url}?|title:${title}`);
+                setUrlAndTitle(url, title);
             }
 
             // Submit URL from the initial load interface
@@ -83,23 +81,19 @@
                 }
             }
 
-            // Update URL hash and displayed title and URL
+            // Update URL hash and displayed title and URL only when there are changes
             function updateFromHash(data) {
                 if (!data || data === 'url:') {
                     window.location.href = window.location.href.split('#')[0];
                     return;
                 }
-                window.location.hash = data;
-                const parsedData = decodeURIComponent(data).split('?|');
-                let url = null, title = null;
-                for (const entry of parsedData) {
-                    if (entry.startsWith("url:")) url = entry.substr(4);
-                    else if (entry.startsWith("title:")) title = entry.substr(6);
-                }
-                
-                // Make the title same as the URL if it's empty, null, or falsy
+                window.location.hash = `url:${data.split('?|').find(e => e.startsWith('url:')).substr(4)}?|title:${data.split('?|').find(e => e.startsWith('title:')).substr(6)}`;
+                loadFromHash();
+            }
+
+            // Set the title and URL based on the provided parameters
+            function setUrlAndTitle(url, title) {
                 if (!title || title === null || title.trim() === '') title = url;
-                
                 document.title = title;
                 document.getElementById("title").textContent = title;
                 document.getElementById("url").textContent = url;
