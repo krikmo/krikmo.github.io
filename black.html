@@ -118,7 +118,8 @@
             document.addEventListener("dblclick", function(event) {
                 if (event.target.id !== "title") {
                     if (window.location.hash) {
-                        const newUrl = prompt("New URL?", "");
+                        const currentUrl = document.getElementById("url").textContent;
+                        const newUrl = prompt("New URL?", currentUrl);
                         if (newUrl !== null && newUrl.trim() !== "") {
                             updateFromHash(`url:${newUrl}?|title:${newUrl}`);
                         }
