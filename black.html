@@ -49,6 +49,7 @@
     <script>
         // Page Initialization
         window.addEventListener("DOMContentLoaded", function () {
+            // Initial Page Load
             const hashExists = window.location.hash;
             if (hashExists) {
                 loadFromHash();
@@ -61,7 +62,7 @@
                 event.preventDefault();
                 submitFromInput();
             });
-
+            
             // Load content from URL hash
             function loadFromHash() {
                 const data = decodeURIComponent(window.location.hash.substr(1)).split('?|');
@@ -71,6 +72,15 @@
                     else if (entry.startsWith("title:")) title = entry.substr(6);
                 }
                 updateFromHash(`url:${url}?|title:${title}`);
+            }
+
+            // Submit URL from the initial load interface
+            function submitFromInput() {
+                const url = document.getElementById("input-box").value;
+                if (url) {
+                    updateFromHash(`url:${url}?|title:${url}`);
+                    document.getElementById("input-form").style.display = "none";
+                }
             }
 
             // Update URL hash and displayed title and URL
@@ -87,22 +97,13 @@
                     else if (entry.startsWith("title:")) title = entry.substr(6);
                 }
                 
-                // Make the title same as the URL if it's empty, null, or falsy.
+                // Make the title same as the URL if it's empty, null, or falsy
                 if (!title || title === null || title.trim() === '') title = url;
                 
                 document.title = title;
                 document.getElementById("title").textContent = title;
                 document.getElementById("url").textContent = url;
                 document.getElementById("url").setAttribute("href", url);
-            }
-
-            // Submit URL from the initial load interface
-            function submitFromInput() {
-                const url = document.getElementById("input-box").value;
-                if (url) {
-                    updateFromHash(`url:${url}?|title:${url}`);
-                    document.getElementById("input-form").style.display = "none";
-                }
             }
 
             // Double-click Title for Title Prompt
@@ -118,10 +119,8 @@
                 if (event.target.id !== "title") {
                     if (window.location.hash) {
                         const newUrl = prompt("New URL?", "");
-                        if (newUrl) {
+                        if (newUrl !== null && newUrl.trim() !== "") {
                             updateFromHash(`url:${newUrl}?|title:${newUrl}`);
-                        } else {
-                            updateFromHash('url:');
                         }
                     } else {
                         const inputValue = document.getElementById("input-box").value;
