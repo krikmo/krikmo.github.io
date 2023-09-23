@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DCA Investment Tracker</title>
+  <style>
+    body {
+      background-color: #2c2f33;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      background-color: #36393f;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    input, select, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    input, select {
+      background-color: #40444b;
+      color: #fff;
+    }
+
+    button {
+      background-color: #f7931a;
+      color: #000;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #d68018;
+    }
+
+    table {
+      width: 100%;
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #4f545c;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>DCA Investment Tracker</h1>
+
+    <div class="input-section">
+      <label for="investment">Investment Amount:</label>
+      <input id="investment" type="number" min="0">
+      <label for="frequency">Investment Frequency:</label>
+      <select id="frequency">
+        <option value="4">Weekly</option>
+        <option value="1">Monthly</option>
+      </select>
+      <button id="calculate">Start Tracking</button>
+    </div>
+
+    <div class="projection-section">
+      <table>
+        <thead>
+          <tr>
+            <th>Time Frame</th>
+            <th>Total Invested</th>
+          </tr>
+        </thead>
+        <tbody id="projections">
+          <!-- Projections will be inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('calculate').addEventListener('click', function() {
+      const investment = document.getElementById('investment').value;
+      const frequency = document.getElementById('frequency').value;
+
+      const timeFrames = {
+        '1 Month': 1,
+        '6 Months': 6,
+        '1 Year': 12,
+        '5 Years': 60
+      };
+
+      const projections = document.getElementById('projections');
+      projections.innerHTML = ''; // Clear the table
+
+      for (const [label, months] of Object.entries(timeFrames)) {
+        const totalInvestment = investment * months * frequency;
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${label}</td><td>${totalInvestment.toFixed(2)}</td>`;
+        projections.appendChild(row);
+      }
+    });
+  </script>
+</body>
+</html>
