@@ -12,7 +12,7 @@ javascript: (function () {
             } else if (liveChatElement || watchingNowElement) {
                 editTitle(`LIVE`);
                 redirect();
-            } else if (retryCount < 5) {
+            } else if (retryCount < 3) {
                 retryCount++;
                 setTimeout(mainLogic, 1000);
             }
