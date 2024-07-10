@@ -14,8 +14,13 @@ javascript: (function () {
                 redirect();
             } else if (retryCount < 3) {
                 retryCount++;
-                setTimeout(mainLogic, 1000);
+                mainLogic();
             }
+        } else if (location.href.endsWith('/live')) {
+            editTitle(`LIVE`);
+            redirect();
+        } else if (location.href.includes('youtube.com/watch')) {
+            redirect();
         } else {
             redirect();
         }

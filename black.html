@@ -2,7 +2,6 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="src/black.ico" type="image/x-icon">
     <title>black.html receiver saver</title>
     <style>
         body {
@@ -11,7 +10,7 @@
             font-size: 150%;
         }
 
-        /* Version 1.3 */
+        /* Version 1.4 */
         /* Style for input-page */
         #input-form {
             display: none;
@@ -103,8 +102,12 @@
             // Set the title and URL based on the provided parameters
             function setUrlAndTitle(url, title) {
                 let tabTitle = url;
+                const circleSymbol = "⚪ ";
+
                 if (title && title.trim() !== '' && title !== url) {
-                    tabTitle = `${title} | ${url}`;
+                    tabTitle = `${circleSymbol}${title} | ${url}`;
+                } else {
+                    tabTitle = `${circleSymbol}${url}`;
                 }
                 
                 document.title = tabTitle;
