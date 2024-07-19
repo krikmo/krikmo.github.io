@@ -1,5 +1,6 @@
-javascript: (function () {
+javascript:(function () {
     let retryCount = 0;
+
     function mainLogic() {
         if (location.href.includes('youtube.com/watch?v=')) {
             const durationElement = document.querySelector('meta[itemprop=duration]');
@@ -14,14 +15,25 @@ javascript: (function () {
                 redirect();
             } else if (retryCount < 3) {
                 retryCount++;
-                mainLogic();
+                setTimeout(mainLogic, 2000);
+            } else if (retryCount >= 3) {
+                editTitle(``);
+                redirect();
             }
         } else if (location.href.endsWith('/live')) {
             editTitle(`LIVE`);
             redirect();
-        } else if (location.href.includes('youtube.com/watch')) {
+        } else if (location.href.includes('/live/')) {
+            const durationElement = document.querySelector('meta[itemprop=duration]');
+
+            if (durationElement) {
+                processDuration(durationElement);
+                redirect();
+            } else
+            editTitle(`LIVE`);
             redirect();
         } else {
+            editTitle(``);
             redirect();
         }
     }
@@ -51,13 +63,18 @@ javascript: (function () {
 
         if (formattedDuration !== '00:00') {
             editTitle(formattedDuration);
+        } else {
+          editTitle(`LIVE`);
+          redirect();
         }
     }
 
     function editTitle(prefix) {
         document.title = document.title.replace(/^\(\d+\)\s*/, '');
-        document.title = `${prefix} | ${document.title}`;
-    }
+        if (prefix) {
+            document.title = `${prefix} | ${document.title}`;
+        }
+    }    
 
     function redirect() {
         location = `https://krikmo.github.io/black.html#url:${encodeURIComponent(location.href)}?|title:${encodeURIComponent(document.title)}`;
