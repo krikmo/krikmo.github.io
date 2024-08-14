@@ -4,13 +4,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>black.html receiver saver</title>
     <style>
+        /* Version 1.6 */
         body {
             background-color: #000;
             color: #fff;
             font-size: 150%;
+            margin: 10;
+            padding: 0;
         }
 
-        /* Version 1.5 */
+        /* Responsive styling */
+        #title, #url {
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+
         /* Style for input-page */
         #input-form {
             display: none;
@@ -35,6 +43,9 @@
         a {
             text-decoration: none;
             color: white;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            display: block;
         }
 
         /* Style for bottom-click zone */

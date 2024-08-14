@@ -29,9 +29,10 @@ javascript:(function () {
             if (durationElement) {
                 processDuration(durationElement);
                 redirect();
-            } else
-            editTitle(`LIVE`);
-            redirect();
+            } else {
+                editTitle(`LIVE`);
+                redirect();
+            }
         } else {
             editTitle(``);
             redirect();
@@ -64,8 +65,8 @@ javascript:(function () {
         if (formattedDuration !== '00:00') {
             editTitle(formattedDuration);
         } else {
-          editTitle(`LIVE`);
-          redirect();
+            editTitle(`LIVE`);
+            redirect();
         }
     }
 
