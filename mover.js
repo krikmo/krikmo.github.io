@@ -7,36 +7,43 @@ javascript:(function () {
             const liveChatElement = document.querySelector('#live-chat-iframe');
             const watchingNowElement = document.body.textContent.includes('watching now');
 
-            if (durationElement) {
+            if (getSelectedText()) {
+                editTitle(getSelectedText());
+            } else if (durationElement) {
                 processDuration(durationElement);
-                redirect();
             } else if (liveChatElement || watchingNowElement) {
                 editTitle(`LIVE`);
-                redirect();
             } else if (retryCount < 3) {
                 retryCount++;
                 setTimeout(mainLogic, 2000);
+                return;
             } else if (retryCount >= 3) {
                 editTitle(``);
-                redirect();
             }
         } else if (location.href.endsWith('/live')) {
-            editTitle(`LIVE`);
-            redirect();
+            if (getSelectedText()) {
+                editTitle(getSelectedText());
+            } else {
+                editTitle(`LIVE`);
+            }
         } else if (location.href.includes('/live/')) {
             const durationElement = document.querySelector('meta[itemprop=duration]');
 
-            if (durationElement) {
+            if (getSelectedText()) {
+                editTitle(getSelectedText());
+            } else if (durationElement) {
                 processDuration(durationElement);
-                redirect();
             } else {
                 editTitle(`LIVE`);
-                redirect();
             }
         } else {
-            editTitle(``);
-            redirect();
+            if (getSelectedText()) {
+                editTitle(getSelectedText());
+            } else {
+                editTitle(``);
+            }
         }
+        redirect();
     }
 
     function processDuration(durationElement) {
@@ -66,7 +73,6 @@ javascript:(function () {
             editTitle(formattedDuration);
         } else {
             editTitle(`LIVE`);
-            redirect();
         }
     }
 
@@ -75,10 +81,14 @@ javascript:(function () {
         if (prefix) {
             document.title = `${prefix} | ${document.title}`;
         }
-    }    
+    }
 
     function redirect() {
         location = `https://krikmo.github.io/black.html#url:${encodeURIComponent(location.href)}?|title:${encodeURIComponent(document.title)}`;
+    }
+
+    function getSelectedText() {
+        return window.getSelection().toString().trim();
     }
 
     mainLogic();
