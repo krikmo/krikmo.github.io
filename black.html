@@ -130,8 +130,11 @@
                 
                 document.title = tabTitle;
                 document.getElementById("title").textContent = title || url;
-                document.getElementById("url").textContent = url;
-                document.getElementById("url").setAttribute("href", url);
+
+                const urlElement = document.getElementById("url");
+                urlElement.textContent = url;
+                urlElement.setAttribute("href", url);
+                urlElement.setAttribute("rel", "noreferrer"); // Add this line
             }
 
             // Double-click Title for Title Prompt
