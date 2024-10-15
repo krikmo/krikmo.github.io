@@ -11,5 +11,5 @@ if (theColor === "black") {
 } else if (theColor === "green") {
     document.body.style.background = "green";
 } else {
-    document.getElementById("result").innerHTML = ("Find a better color");
+    document.getElementById("result").innerHTML = ("Find a better color :D");
 }

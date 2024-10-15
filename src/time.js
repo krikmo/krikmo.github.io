@@ -10,4 +10,3 @@ function timeStamp() {
 }
 document.getElementById("time").innerHTML = timeStamp();
 
-
