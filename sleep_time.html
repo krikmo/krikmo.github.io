@@ -3,133 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sleep Time</title>
+    <title>Advanced Sleep Calculator</title>
     <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-medium: #1e1e1e;
+            --bg-light: #222;
+            --accent-primary: #6200ea;
+            --accent-secondary: #3700b3;
+            --text-light: #ffffff;
+        }
         body {
-            background-color: #4A4A4A;
-            font-family: Arial, sans-serif;
-            color: #FFFFFF;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Arial', sans-serif;
             text-align: center;
+            padding: 20px;
             margin: 0;
-            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
         }
-        h1 {
-            font-size: 2.5rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
+        .container {
+            background-color: var(--bg-medium);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
         }
-        input[type="text"] {
-            font-size: 1.5rem;
-            width: 50%;
-            max-width: 300px;
+        h2 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: var(--text-light);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        select, input[type="time"] {
+            width: 100%;
             padding: 10px;
-            border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            font-size: 1rem;
+            box-sizing: border-box;
         }
-        button {
-            font-size: 1.25rem;
-            padding: 10px 15px;
-            margin: 1rem;
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
             border: none;
-            border-radius: 5px;
-            background-color: #7A7A7A;
-            color: #FFFFFF;
+            border-radius: 8px;
+            background-color: var(--accent-primary);
+            color: white;
             cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            margin: 10px 5px;
         }
-        button:hover {
-            background-color: #9A9A9A;
-        }
-        .toggle-btn {
-            background-color: #1E4B7E;
-        }
-        .toggle-btn:hover {
-            background-color: #3A6EA3;
+        .btn:hover {
+            background-color: var(--accent-secondary);
         }
         #result {
-            font-size: 2rem;
-            margin-top: 2rem;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            min-height: 2rem;
+        }
+        .toggle-info {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 10px;
+        }
+        @media (max-width: 400px) {
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Sleep Time</h1>
-    <input type="text" id="timeInput" placeholder="HH:MM">
-    <button id="currentBtn">Current Time</button>
-    <br>
-    <button id="toggleBtn" class="toggle-btn">Toggle</button>
-    <div id="buttons"></div>
-    <div id="result"></div>
+<div class="container">
+    <h2 id="mainTitle">Sleep Time Calculator</h2>
+    
+    <div class="input-group">
+        <input type="time" id="timeInput" value="23:00">
+    </div>
+
+    <div class="input-group">
+        <label for="sleepHours">Select Sleep Duration:</label>
+        <select id="sleepHours">
+            <option value="5">5 hours</option>
+            <option value="5.5">5 hours 30 minutes</option>
+            <option value="6">6 hours</option>
+            <option value="6.5">6 hours 30 minutes</option>
+            <option value="7" selected>7 hours</option>
+            <option value="7.5">7 hours 30 minutes</option>
+            <option value="8">8 hours</option>
+            <option value="9">9 hours</option>
+        </select>
+    </div>
+
+    <div>
+        <button class="btn" onclick="calculate()">Calculate</button>
+        <button class="btn" onclick="toggleScenario()">Switch Mode</button>
+    </div>
+
+    <div id="result" aria-live="polite"></div>
+    
+    <div class="toggle-info">
+        Current Mode: <span id="modeDescription">Sleep Time</span>
+    </div>
+</div>
+
 <script>
-    let mode = localStorage.getItem('mode') || 'addHours';
-    const buttonsDiv = document.getElementById('buttons');
-    updateButtons();
+    const timeInput = document.getElementById('timeInput');
+    const sleepHoursInput = document.getElementById('sleepHours');
+    const resultDisplay = document.getElementById('result');
+    const mainTitle = document.getElementById('mainTitle');
+    const modeDescription = document.getElementById('modeDescription');
 
-    document.getElementById('currentBtn').addEventListener('click', function () {
-        let currentTime = new Date();
-        let hours = currentTime.getHours().toString().padStart(2, '0');
-        let minutes = currentTime.getMinutes().toString().padStart(2, '0');
-        document.getElementById('timeInput').value = `${hours}:${minutes}`;
-    });
+    let isSleepTimeScenario = false; // Reversed initial state
 
-    document.getElementById('toggleBtn').addEventListener('click', function () {
-        mode = mode === 'addHours' ? 'futureTime' : 'addHours';
-        localStorage.setItem('mode', mode);
-        updateButtons();
-    });
-
-    function updateButtons() {
-        let buttonValues = mode === 'addHours' ? [5, 6, 7, 8] : [7, 8, 9, 10, 11, 12];
-        let onClickFunction = mode === 'addHours' ? 'addHours' : 'calculateDifference';
-        buttonsDiv.innerHTML = buttonValues.map(value => `<button onclick="${onClickFunction}(${value})">${value}h</button>`).join('');
+    function formatTime(date) {
+        return date.toLocaleTimeString('en-GB', { 
+            hour: '2-digit', 
+            minute: '2-digit', 
+            hour12: false 
+        });
     }
 
-    function addHours(hoursToAdd) {
-        let timeStr = document.getElementById('timeInput').value;
-        let timeParts = timeStr.split(':');
-        if (timeParts.length !== 2) {
-            alert('Please enter a valid time in HH:MM format.');
-            return;
+    function calculate() {
+        const timeValue = timeInput.value;
+        const sleepDuration = parseFloat(sleepHoursInput.value);
+        const [hours, minutes] = timeValue.split(':').map(Number);
+        
+        const inputTime = new Date();
+        inputTime.setHours(hours);
+        inputTime.setMinutes(minutes);
+
+        let resultTime;
+        if (isSleepTimeScenario) {
+            // Calculate Sleep Time
+            resultTime = new Date(inputTime.getTime() - sleepDuration * 60 * 60 * 1000);
+            resultDisplay.innerText = `You should sleep at ${formatTime(resultTime)}`;
+            resultDisplay.style.color = '#4CAF50'; // Green for positive message
+        } else {
+            // Calculate Sleep Time
+            resultTime = new Date(inputTime.getTime() + sleepDuration * 60 * 60 * 1000);
+            resultDisplay.innerText = `You should wake up at ${formatTime(resultTime)}`;
+            resultDisplay.style.color = '#2196F3'; // Blue for wake-up time
         }
 
-        let inputDate = new Date();
-        inputDate.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
-
-        let resultDate
-    = new Date(inputDate.getTime() + hoursToAdd * 60 * 60 * 1000);
-        let resultHours = resultDate.getHours().toString().padStart(2, '0');
-        let resultMinutes = resultDate.getMinutes().toString().padStart(2, '0');
-
-        document.getElementById('result').innerHTML = `${resultHours}:${resultMinutes}`;
+        // Store the last inputs in local storage
+        localStorage.setItem('lastTimeInput', timeValue);
+        localStorage.setItem('lastSleepDuration', sleepHoursInput.value);
+        localStorage.setItem('lastScenario', isSleepTimeScenario.toString());
     }
 
-function calculateDifference(targetHour) {
-    let timeStr = document.getElementById('timeInput').value;
-    let timeParts = timeStr.split(':');
-    if (timeParts.length !== 2) {
-        alert('Please enter a valid time in HH:MM format.');
-        return;
+    function toggleScenario() {
+        isSleepTimeScenario = !isSleepTimeScenario;
+        resultDisplay.innerText = ''; // Clear previous result
+
+        if (isSleepTimeScenario) {
+            mainTitle.innerText = 'Wake Up Time Calculator';
+            modeDescription.innerText = 'Wake Up Time';
+        } else {
+            mainTitle.innerText = 'Sleep Time Planner';
+            modeDescription.innerText = 'Sleep Time';
+        }
     }
 
-    let inputDate = new Date();
-    inputDate.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
+    // Load last settings on page load
+    window.onload = function() {
+        const lastTimeInput = localStorage.getItem('lastTimeInput') || '23:00';
+        const lastSleepDuration = localStorage.getItem('lastSleepDuration') || '7';
+        const lastScenario = localStorage.getItem('lastScenario') === 'true';
 
-    let targetDate = new Date(inputDate);
-    targetDate.setHours(targetHour, 0);
+        timeInput.value = lastTimeInput;
+        sleepHoursInput.value = lastSleepDuration;
+        
+        // Restore previous scenario if exists
+        if (lastScenario !== isSleepTimeScenario) {
+            toggleScenario();
+        }
 
-    if (targetDate < inputDate) {
-        targetDate.setDate(targetDate.getDate() + 1);
-    }
-
-    let timeDifference = targetDate - inputDate;
-    let hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
-    let minutesDifference = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-
-    // Pad minutesDifference with a leading zero if it's a single digit
-    minutesDifference = minutesDifference.toString().padStart(2, '0');
-
-    document.getElementById('result').innerHTML = `${hoursDifference}:${minutesDifference}`;
-}
-
+        // Trigger initial calculate to show a default result
+        calculate();
+    };
 </script>
 </body>
 </html>
