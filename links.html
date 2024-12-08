@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Converter</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #7cb9e8;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            background-color: #2d2d2d;
+            border: 1px solid #404040;
+            border-radius: 8px;
+            color: #ffffff;
+            padding: 15px;
+            font-size: 14px;
+            resize: none;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #7cb9e8;
+            box-shadow: 0 0 5px rgba(124, 185, 232, 0.3);
+        }
+
+        #linkContainer {
+            width: 100%;
+            text-align: justify;
+        }
+
+        .link-wrapper {
+            display: flex;
+            align-items: center;
+            margin: 4px 0;
+        }
+
+        .delete-button {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: #666;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+        }
+
+        .link-wrapper:hover .delete-button {
+            opacity: 1;
+        }
+
+        .delete-button:hover {
+            color: #ff4444;
+        }
+
+        .link-item {
+            display: block;
+            color: #7cb9e8;
+            text-decoration: none;
+            padding: 8px 0;
+            transition: color 0.3s ease;
+            font-size: 14px;
+            word-break: break-all;
+            flex-grow: 1;
+        }
+
+        .link-item:hover {
+            color: #a8d5ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Link Converter</h1>
+        <textarea id="linkInput" placeholder="Cole seus links aqui, um por linha..."></textarea>
+        <div id="linkContainer"></div>
+    </div>
+
+    <script>
+        document.getElementById('linkInput').addEventListener('input', function() {
+            const links = this.value.split('\n').filter(link => link.trim() !== '');
+            const linkContainer = document.getElementById('linkContainer');
+            linkContainer.innerHTML = '';
+
+            links.forEach(link => {
+                if (link.trim()) {
+                    let url = link.trim();
+                    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                        url = 'https://' + url;
+                    }
+
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'link-wrapper';
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'delete-button';
+                    deleteButton.innerHTML = '×';
+                    deleteButton.onclick = function() {
+                        wrapper.remove();
+                        // Atualiza o textarea removendo o link
+                        const currentLinks = document.getElementById('linkInput').value.split('\n');
+                        const linkIndex = currentLinks.findIndex(l => l.trim() === link.trim());
+                        if (linkIndex > -1) {
+                            currentLinks.splice(linkIndex, 1);
+                            document.getElementById('linkInput').value = currentLinks.join('\n');
+                        }
+                    };
+
+                    const linkElement = document.createElement('a');
+                    linkElement.href = url;
+                    linkElement.className = 'link-item';
+                    linkElement.textContent = url;
+                    linkElement.target = '_blank';
+                    linkElement.rel = 'noreferrer noopener';
+                    
+                    wrapper.appendChild(deleteButton);
+                    wrapper.appendChild(linkElement);
+                    linkContainer.appendChild(wrapper);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
