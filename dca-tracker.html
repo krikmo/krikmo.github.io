@@ -1,288 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DCA Tracking</title>
-    <link rel="stylesheet" href="src/all.min.css">
-    <style>
-        body {
-            background-color: #1a1a1a;
-            color: #ffffff;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 600px;
-            width: 90%;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-
-        .card {
-            background-color: #2d2d2d;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #7cb9e8;
-            margin-bottom: 2rem;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        input {
-            background-color: #3d3d3d;
-            border: none;
-            border-radius: 5px;
-            color: #ffffff;
-            padding: 0.5rem;
-            flex: 1;
-        }
-
-        button {
-            background-color: #7cb9e8;
-            border: none;
-            border-radius: 5px;
-            color: #1a1a1a;
-            padding: 0.5rem 1.5rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            min-width: 45px;
-        }
-
-        button:hover {
-            background-color: #5a9bd5;
-        }
-
-        .result {
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid #3d3d3d;
-        }
-
-        .history {
-            margin-top: 1rem;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .history-item {
-            background-color: #3d3d3d;
-            padding: 0.5rem;
-            margin: 0.5rem 0;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-        }
-
-        .delete-btn {
-            opacity: 0;
-            cursor: pointer;
-            color: #ff4444;
-            margin-right: 10px;
-            transition: opacity 0.3s;
-            font-size: 16px;
-            width: 20px;
-            height: 20px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .history-item:hover .delete-btn {
-            opacity: 1;
-        }
-
-        .btn-clear {
-            background-color: #ff4444;
-        }
-
-        .btn-clear:hover {
-            background-color: #cc3333;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DCA Tracking</title>
+<link rel="stylesheet" href="src/all.min.css">
+<style>
+body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+.container {
+    max-width: 600px;
+    width: 90%;
+    padding: 2rem;
+    margin: 2rem 0;
+}
+.card {
+    background-color: #121212;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+h1 {
+    text-align: center;
+    color: #7cb9e8;
+    margin-bottom: 2rem;
+}
+.input-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+input {
+    background-color: #222222;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 0.5rem;
+    flex: 1;
+}
+button {
+    background-color: #7cb9e8;
+    border: none;
+    border-radius: 5px;
+    color: #000000;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    min-width: 45px;
+}
+button:hover {
+    background-color: #5a9bd5;
+}
+.result {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #3d3d3d;
+}
+.history {
+    margin-top: 1rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+.history-item {
+    background-color: #222222;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+.delete-btn {
+    opacity: 0;
+    cursor: pointer;
+    color: #ff4444;
+    margin-right: 10px;
+    transition: opacity 0.3s;
+    font-size: 16px;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.history-item:hover .delete-btn {
+    opacity: 1;
+}
+.btn-clear {
+    background-color: #ff4444;
+}
+.btn-clear:hover {
+    background-color: #cc3333;
+}
+</style>
 </head>
 <body>
 <div class="container">
-    <div class="card">
-        <h1>DCA Tracking</h1>
-        <div class="input-group">
-            <input type="text" id="amount" placeholder="Amount" inputmode="decimal">
-            <input type="text" id="price" placeholder="Price" inputmode="decimal">
-            <button onclick="add()"><i class="fas fa-plus"></i></button>
-            <button onclick="clearAll()" class="btn-clear">&#x1F9F9;</button>
-        </div>
-        <div class="result">
-            <p>Total Amount: <span id="totalAmount">0</span></p>
-            <p>Average Price: <span id="averagePrice">0.00</span></p>
-            <p>Total Value: <span id="totalValue">0.00</span></p>
-        </div>
-        <div class="history" id="history"></div>
-        <div class="export-import">
-            <button onclick="exportData()">Export</button>
-            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)" />
-            <button onclick="document.getElementById('import-file').click()">Import</button>
-        </div>
-    </div>
+<div class="card">
+<h1>DCA Tracking</h1>
+<div class="input-group">
+<input type="text" id="amount" placeholder="Amount" inputmode="decimal">
+<input type="text" id="price" placeholder="Price" inputmode="decimal">
+<button onclick="add()"><i class="fas fa-plus"></i></button>
+<button onclick="clearAll()" class="btn-clear">&#x1F9F9;</button>
 </div>
-
+<div class="result">
+<p>Total Amount: <span id="totalAmount">0</span></p>
+<p>Average Price: <span id="averagePrice">0.00</span></p>
+<p>Total Value: <span id="totalValue">0.00</span></p>
+</div>
+<div class="history" id="history"></div>
+<div class="export-import">
+<button onclick="exportData()">Export</button>
+<input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)" />
+<button onclick="document.getElementById('import-file').click()">Import</button>
+</div>
+</div>
+</div>
 <script>
-    let purchases = [];
-
-    function loadData() {
-        const savedData = localStorage.getItem('dcaTracking');
-        if (savedData) {
-            purchases = JSON.parse(savedData);
-            updateCalculations();
-        }
+let purchases = [];
+function loadData() {
+    const savedData = localStorage.getItem('dcaTracking');
+    if (savedData) {
+        purchases = JSON.parse(savedData);
+        updateCalculations();
     }
-
-    function saveData() {
-        localStorage.setItem('dcaTracking', JSON.stringify(purchases));
+}
+function saveData() {
+    localStorage.setItem('dcaTracking', JSON.stringify(purchases));
+}
+function getDecimalPlaces(number) {
+    const str = number.toString();
+    const decimalPos = str.indexOf('.');
+    if (decimalPos === -1) return 0;
+    const decimals = str.length - decimalPos - 1;
+    return Math.min(decimals, 8);
+}
+function formatAmount(number) {
+    const maxDecimals = getDecimalPlaces(number);
+    return number.toLocaleString('en-US', {
+        minimumFractionDigits: maxDecimals,
+        maximumFractionDigits: maxDecimals
+    });
+}
+function formatValue(number) {
+    return number.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+function convertToNumber(text) {
+    text = text.trim().replace(/\s/g, '');
+    if (text.includes(',')) {
+        return parseFloat(text.replace(/\./g, '').replace(',', '.'));
     }
-
-    function getDecimalPlaces(number) {
-        const str = number.toString();
-        const decimalPos = str.indexOf('.');
-        if (decimalPos === -1) return 0;
-        const decimals = str.length - decimalPos - 1;
-        return Math.min(decimals, 8);
+    return parseFloat(text);
+}
+function clearAll() {
+    if (confirm('Do you really want to clear all data?')) {
+        purchases = [];
+        saveData();
+        updateCalculations();
     }
-
-    function formatAmount(number) {
-        const maxDecimals = getDecimalPlaces(number);
-        return number.toLocaleString('en-US', {
-            minimumFractionDigits: maxDecimals,
-            maximumFractionDigits: maxDecimals
-        });
+}
+function removePurchase(index) {
+    purchases.splice(index, 1);
+    saveData();
+    updateCalculations();
+}
+function add() {
+    const amountInput = document.getElementById('amount');
+    const priceInput = document.getElementById('price');
+    const amount = convertToNumber(amountInput.value);
+    const price = convertToNumber(priceInput.value);
+    if (isNaN(amount) || isNaN(price)) {
+        alert('Please enter valid values');
+        return;
     }
-
-    function formatValue(number) {
-        return number.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-    }
-
-    function convertToNumber(text) {
-        text = text.trim().replace(/\s/g, '');
-        if (text.includes(',')) {
-            return parseFloat(text.replace(/\./g, '').replace(',', '.'));
-        }
-        return parseFloat(text);
-    }
-
-    function clearAll() {
-        if (confirm('Do you really want to clear all data?')) {
-            purchases = [];
+    purchases.push({ amount, price });
+    saveData();
+    updateCalculations();
+    amountInput.value = '';
+    priceInput.value = '';
+    amountInput.focus();
+}
+function updateCalculations() {
+    const totalAmount = purchases.reduce((acc, curr) => acc + curr.amount, 0);
+    const totalValue = purchases.reduce((acc, curr) => acc + (curr.amount * curr.price), 0);
+    const averagePrice = totalValue / totalAmount || 0;
+    document.getElementById('totalAmount').textContent = formatAmount(totalAmount);
+    document.getElementById('averagePrice').textContent = formatValue(averagePrice);
+    document.getElementById('totalValue').textContent = formatValue(totalValue);
+    const history = document.getElementById('history');
+    history.innerHTML = '';
+    purchases.forEach((purchase, index) => {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.innerHTML = `
+            <div style="display: flex; align-items: center;">
+                <span class="delete-btn" onclick="removePurchase(${index})">✖</span>
+                <span>Purchase ${index + 1}: ${formatAmount(purchase.amount)} units</span>
+            </div>
+            <span>${formatValue(purchase.price)}</span>
+        `;
+        history.appendChild(item);
+    });
+}
+function exportData() {
+    const dataStr = JSON.stringify(purchases);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('download', 'dcaTracking.json');
+    a.click();
+    URL.revokeObjectURL(url);
+}
+function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            purchases = JSON.parse(e.target.result);
             saveData();
             updateCalculations();
+        } catch (error) {
+            alert('Invalid JSON file');
         }
+    };
+    reader.readAsText(file);
+}
+document.getElementById('price').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        add();
     }
-
-    function removePurchase(index) {
-        purchases.splice(index, 1);
-        saveData();
-        updateCalculations();
-    }
-
-    function add() {
-        const amountInput = document.getElementById('amount');
-        const priceInput = document.getElementById('price');
-
-        const amount = convertToNumber(amountInput.value);
-        const price = convertToNumber(priceInput.value);
-
-        if (isNaN(amount) || isNaN(price)) {
-            alert('Please enter valid values');
-            return;
-        }
-
-        purchases.push({ amount, price });
-        saveData();
-        updateCalculations();
-        
-        amountInput.value = '';
-        priceInput.value = '';
-        amountInput.focus();
-    }
-
-    function updateCalculations() {
-        const totalAmount = purchases.reduce((acc, curr) => acc + curr.amount, 0);
-        const totalValue = purchases.reduce((acc, curr) => acc + (curr.amount * curr.price), 0);
-        const averagePrice = totalValue / totalAmount || 0;
-
-        document.getElementById('totalAmount').textContent = formatAmount(totalAmount);
-        document.getElementById('averagePrice').textContent = formatValue(averagePrice);
-        document.getElementById('totalValue').textContent = formatValue(totalValue);
-
-        const history = document.getElementById('history');
-        history.innerHTML = '';
-        purchases.forEach((purchase, index) => {
-            const item = document.createElement('div');
-            item.className = 'history-item';
-            item.innerHTML = `
-                <div style="display: flex; align-items: center;">
-                    <span class="delete-btn" onclick="removePurchase(${index})">✖</span>
-                    <span>Purchase ${index + 1}: ${formatAmount(purchase.amount)} units</span>
-                </div>
-                <span>${formatValue(purchase.price)}</span>
-            `;
-            history.appendChild(item);
-        });
-    }
-
-    function exportData() {
-        const dataStr = JSON.stringify(purchases);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.setAttribute('href', url);
-        a.setAttribute('download', 'dcaTracking.json');
-        a.click();
-        URL.revokeObjectURL(url);
-    }
-
-    function importData(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                purchases = JSON.parse(e.target.result);
-                saveData();
-                updateCalculations();
-            } catch (error) {
-                alert('Invalid JSON file');
-            }
-        };
-        reader.readAsText(file);
-    }
-
-    document.getElementById('price').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            add();
-        }
-    });
-
-    loadData();
+});
+loadData();
 </script>
 </body>
 </html>
