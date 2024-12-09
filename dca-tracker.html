@@ -134,6 +134,11 @@
             <p>Total Value: <span id="totalValue">0.00</span></p>
         </div>
         <div class="history" id="history"></div>
+        <div class="export-import">
+            <button onclick="exportData()">Export</button>
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)" />
+            <button onclick="document.getElementById('import-file').click()">Import</button>
+        </div>
     </div>
 </div>
 
@@ -241,6 +246,34 @@
             `;
             history.appendChild(item);
         });
+    }
+
+    function exportData() {
+        const dataStr = JSON.stringify(purchases);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('download', 'dcaTracking.json');
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                purchases = JSON.parse(e.target.result);
+                saveData();
+                updateCalculations();
+            } catch (error) {
+                alert('Invalid JSON file');
+            }
+        };
+        reader.readAsText(file);
     }
 
     document.getElementById('price').addEventListener('keypress', function(e) {
