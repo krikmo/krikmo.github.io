@@ -118,6 +118,12 @@ button:hover {
 <p>Total Amount: <span id="totalAmount">0</span></p>
 <p>Average Price: <span id="averagePrice">0.00</span></p>
 <p>Total Value: <span id="totalValue">0.00</span></p>
+<div class="input-group">
+    <input type="text" id="currentPrice" placeholder="Current Price" inputmode="decimal">
+    <button onclick="calculateProfit()">Calculate Profit</button>
+</div>
+<p>Result Percentage: <span id="profitPercentage">0.00%</span></p>
+<p>Nominal Result: <span id="nominalProfit">0.00</span></p>
 </div>
 <div class="history" id="history"></div>
 <div class="export-import">
@@ -215,6 +221,25 @@ function updateCalculations() {
         `;
         history.appendChild(item);
     });
+}
+function calculateProfit() {
+    const currentPrice = convertToNumber(document.getElementById('currentPrice').value);
+    if (isNaN(currentPrice)) {
+        alert('Please enter a valid current price');
+        return;
+    }
+
+    const totalAmount = purchases.reduce((acc, curr) => acc + curr.amount, 0);
+    const totalValue = purchases.reduce((acc, curr) => acc + (curr.amount * curr.price), 0);
+    const averagePrice = totalValue / totalAmount || 0;
+
+    // Calculate nominal profit and profit percentage
+    const nominalProfit = (currentPrice - averagePrice) * totalAmount;
+    const profitPercentage = (nominalProfit / totalValue) * 100 || 0;
+
+    // Update the display
+    document.getElementById('profitPercentage').textContent = formatValue(profitPercentage) + '%';
+    document.getElementById('nominalProfit').textContent = formatValue(nominalProfit);
 }
 function exportData() {
     const dataStr = JSON.stringify(purchases);
