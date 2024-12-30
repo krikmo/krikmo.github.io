@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -99,54 +98,77 @@
         .link-item:hover {
             color: #a8d5ff;
         }
+        strong {
+            color: #7cb9e8;
+            display: block;
+            padding: 8px 0;
+            font-size: 16px;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Link Converter</h1>
-        <textarea id="linkInput" placeholder="Cole seus links aqui, um por linha..."></textarea>
+        <textarea id="linkInput" placeholder="Paste links here, one per line..."></textarea>
         <div id="linkContainer"></div>
     </div>
 
     <script>
         document.getElementById('linkInput').addEventListener('input', function() {
-            const links = this.value.split('\n').filter(link => link.trim() !== '');
+            // Split by newlines and remove empty lines
+            const lines = this.value.split('\n').filter(line => line.trim() !== '');
             const linkContainer = document.getElementById('linkContainer');
             linkContainer.innerHTML = '';
 
-            links.forEach(link => {
-                if (link.trim()) {
-                    let url = link.trim();
-                    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                        url = 'https://' + url;
-                    }
-
+            lines.forEach(line => {
+                if (line.trim()) {
                     const wrapper = document.createElement('div');
                     wrapper.className = 'link-wrapper';
 
-                    const deleteButton = document.createElement('button');
-                    deleteButton.className = 'delete-button';
-                    deleteButton.innerHTML = '×';
-                    deleteButton.onclick = function() {
+                    // Check if the line starts with #
+                    if (line.trim().startsWith('#')) {
+                        const headerElement = document.createElement('strong');
+                        headerElement.textContent = line;
+                        wrapper.appendChild(headerElement);
+                    } else {
+                        let url = line.trim();
+                        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                            url = 'https://' + url;
+                        }
+
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'delete-button';
+                        deleteButton.innerHTML = '×';
+                        deleteButton.onclick = function() {
                         wrapper.remove();
-                        // Atualiza o textarea removendo o link
-                        const currentLinks = document.getElementById('linkInput').value.split('\n');
-                        const linkIndex = currentLinks.findIndex(l => l.trim() === link.trim());
-                        if (linkIndex > -1) {
-                            currentLinks.splice(linkIndex, 1);
-                            document.getElementById('linkInput').value = currentLinks.join('\n');
+                        // Get current lines without filtering empty ones
+                        const currentLines = document.getElementById('linkInput').value.split('\n');
+                        const lineIndex = currentLines.findIndex(l => l.trim() === line.trim());
+                        
+                        if (lineIndex > -1) {
+                            // Remove the line
+                            currentLines.splice(lineIndex, 1);
+                            
+                            // If the next line is empty, remove it too
+                            if (lineIndex < currentLines.length && currentLines[lineIndex].trim() === '') {
+                                currentLines.splice(lineIndex, 1);
+                            }
+                            
+                            document.getElementById('linkInput').value = currentLines.join('\n');
                         }
                     };
 
-                    const linkElement = document.createElement('a');
-                    linkElement.href = url;
-                    linkElement.className = 'link-item';
-                    linkElement.textContent = url;
-                    linkElement.target = '_blank';
-                    linkElement.rel = 'noreferrer noopener';
-                    
-                    wrapper.appendChild(deleteButton);
-                    wrapper.appendChild(linkElement);
+                        const linkElement = document.createElement('a');
+                        linkElement.href = url;
+                        linkElement.className = 'link-item';
+                        linkElement.textContent = url;
+                        linkElement.target = '_blank';
+                        linkElement.rel = 'noreferrer noopener';
+                        
+                        wrapper.appendChild(deleteButton);
+                        wrapper.appendChild(linkElement);
+                    }
                     linkContainer.appendChild(wrapper);
                 }
             });
