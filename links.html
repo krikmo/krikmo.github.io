@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -106,6 +107,12 @@
             font-size: 16px;
             margin-top: 8px;
         }
+        hr {
+            border: 0;
+            border-top: 1px solid #404040;
+            margin: 12px 0;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -114,66 +121,83 @@
         <textarea id="linkInput" placeholder="Paste links here, one per line..."></textarea>
         <div id="linkContainer"></div>
     </div>
-
     <script>
         document.getElementById('linkInput').addEventListener('input', function() {
-            // Split by newlines and remove empty lines
-            const lines = this.value.split('\n').filter(line => line.trim() !== '');
+            // Get all lines including empty ones
+            const lines = this.value.split('\n');
             const linkContainer = document.getElementById('linkContainer');
             linkContainer.innerHTML = '';
-
+        
             lines.forEach(line => {
-                if (line.trim()) {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'link-wrapper';
-
-                    // Check if the line starts with #
-                    if (line.trim().startsWith('#')) {
-                        const headerElement = document.createElement('strong');
-                        headerElement.textContent = line;
-                        wrapper.appendChild(headerElement);
-                    } else {
-                        let url = line.trim();
-                        if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                            url = 'https://' + url;
-                        }
-
-                        const deleteButton = document.createElement('button');
-                        deleteButton.className = 'delete-button';
-                        deleteButton.innerHTML = '×';
-                        deleteButton.onclick = function() {
-                        wrapper.remove();
-                        // Get current lines without filtering empty ones
+                const trimmedLine = line.trim();
+                if (!trimmedLine) return; // Skip empty lines
+        
+                const wrapper = document.createElement('div');
+                wrapper.className = 'link-wrapper';
+        
+                // Handle headers (# prefix)
+                if (trimmedLine.startsWith('#')) {
+                    const headerElement = document.createElement('strong');
+                    headerElement.textContent = line; // Preserve original spacing
+                    wrapper.appendChild(headerElement);
+                }
+                // Handle separators (---)
+                else if (/^-{3,}$/.test(trimmedLine)) {
+                    const hr = document.createElement('hr');
+                    hr.style.borderColor = '#404040';
+                    wrapper.innerHTML = '<hr>';
+                }
+                // Handle links and other text
+                else {
+                    // Auto-add https:// prefix if missing
+                    let url = trimmedLine;
+                    if (!url.startsWith('http://') && 
+                        !url.startsWith('https://') && 
+                        !url.startsWith('file://')) {
+                        url = 'https://' + url;
+                    }
+        
+                    // Delete button setup
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'delete-button';
+                    deleteButton.innerHTML = '×';
+                    deleteButton.onclick = function() {
+                        // Get current RAW lines (preserve empty lines)
                         const currentLines = document.getElementById('linkInput').value.split('\n');
-                        const lineIndex = currentLines.findIndex(l => l.trim() === line.trim());
+                        
+                        // Find exact line index using original trim comparison
+                        const lineIndex = currentLines.findIndex(l => l.trim() === trimmedLine);
                         
                         if (lineIndex > -1) {
-                            // Remove the line
+                            // 1. Remove the target line
                             currentLines.splice(lineIndex, 1);
                             
-                            // If the next line is empty, remove it too
-                            if (lineIndex < currentLines.length && currentLines[lineIndex].trim() === '') {
+                            // 2. Remove following empty line if exists
+                            if (lineIndex < currentLines.length && 
+                                currentLines[lineIndex].trim() === '') {
                                 currentLines.splice(lineIndex, 1);
                             }
                             
+                            // Update textarea and trigger refresh
                             document.getElementById('linkInput').value = currentLines.join('\n');
+                            document.getElementById('linkInput').dispatchEvent(new Event('input'));
                         }
                     };
-
-                        const linkElement = document.createElement('a');
-                        linkElement.href = url;
-                        linkElement.className = 'link-item';
-                        linkElement.textContent = url;
-                        linkElement.target = '_blank';
-                        linkElement.rel = 'noreferrer noopener';
-                        
-                        wrapper.appendChild(deleteButton);
-                        wrapper.appendChild(linkElement);
-                    }
-                    linkContainer.appendChild(wrapper);
+        
+                    // Link element setup
+                    const linkElement = document.createElement('a');
+                    linkElement.href = url;
+                    linkElement.className = 'link-item';
+                    linkElement.textContent = line; // Preserve original formatting
+                    linkElement.target = '_blank';
+                    linkElement.rel = 'noreferrer noopener';
+                    
+                    wrapper.appendChild(deleteButton);
+                    wrapper.appendChild(linkElement);
                 }
+                linkContainer.appendChild(wrapper);
             });
         });
-    </script>
+        </script>
 </body>
 </html>
