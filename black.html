@@ -120,8 +120,8 @@
 
             // Set the title and URL based on the provided parameters
             function setUrlAndTitle(url, title) {
-                let tabTitle = url;
                 const circleSymbol = "⚪ ";
+                let tabTitle = url;
 
                 if (title && title.trim() !== '' && title !== url) {
                     tabTitle = `${circleSymbol}${title} | ${url}`;
@@ -135,8 +135,15 @@
                 const urlElement = document.getElementById("url");
                 urlElement.textContent = url;
                 urlElement.setAttribute("href", url);
-                urlElement.setAttribute("rel", "noreferrer");
-                urlElement.setAttribute("target", "_self");
+                
+                // If local link, open in new tab to bypass security limitations
+                if (url.startsWith("file://")) {
+                    urlElement.setAttribute("target", "_blank");
+                    urlElement.removeAttribute("rel");
+                } else {
+                    urlElement.setAttribute("target", "_self");
+                    urlElement.setAttribute("rel", "noreferrer");
+                }
             }
 
             // Double-click Title for Title Prompt
