@@ -147,9 +147,11 @@
             // Double-click Title for Title Prompt
             document.getElementById("title").addEventListener("dblclick", function() {
                 let newTitle = prompt("New Title?", this.textContent);
-                if (newTitle.trim() === '') newTitle = document.getElementById("url").textContent;
-                const data = `url:${document.getElementById("url").textContent}?|title:${newTitle}`;
-                updateFromHash(data);
+                if (newTitle !== null && newTitle.trim() === '') newTitle = document.getElementById("url").textContent;
+                if (newTitle !== null) {
+                    const data = `url:${document.getElementById("url").textContent}?|title:${newTitle}`;
+                    updateFromHash(data);
+                }
             });
 
             // Double-click Body for URL Prompt
@@ -184,15 +186,18 @@
 
             // Spacebar press to open the link
             document.addEventListener('keydown', function(event) {
-                // Check if the pressed key is the spacebar and the input form is not displayed
-                if (event.code === 'Space' && document.getElementById('input-form').style.display === 'none') {
-                    const urlElement = document.getElementById('url');
-                    // Check if the link element exists and has an href
-                    if (urlElement && urlElement.href) {
-                        // Prevent the default spacebar action (e.g., scrolling)
-                        event.preventDefault();
-                        // Programmatically click the link
-                        urlElement.click();
+                // Check if the pressed key is the spacebar and if a URL is loaded (hash exists)
+                if (event.code === 'Space' && window.location.hash) {
+                    // Don't trigger if user is typing in a prompt box
+                    if (event.target.tagName === 'BODY') {
+                        const urlElement = document.getElementById('url');
+                        // Check if the link element exists and has an href
+                        if (urlElement && urlElement.href) {
+                            // Prevent the default spacebar action (e.g., scrolling)
+                            event.preventDefault();
+                            // Programmatically click the link
+                            urlElement.click();
+                        }
                     }
                 }
             });
