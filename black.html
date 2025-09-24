@@ -60,12 +60,10 @@
     </style>
 </head>
 <body>
-    <!-- Input-Page Interface -->
     <form id="input-form" onsubmit="event.preventDefault(); submitFromInput();">
         <input id="input-box" type="url" required>
     </form>
 
-    <!-- Load-Page Interface -->
     <p id="title"></p>
     <a id="url"></a>
     <div id="bottom-click"></div>
@@ -181,6 +179,21 @@
                 } else {
                     const inputValue = document.getElementById("input-box").value;
                     if (inputValue) submitFromInput();
+                }
+            });
+
+            // Spacebar press to open the link
+            document.addEventListener('keydown', function(event) {
+                // Check if the pressed key is the spacebar and the input form is not displayed
+                if (event.code === 'Space' && document.getElementById('input-form').style.display === 'none') {
+                    const urlElement = document.getElementById('url');
+                    // Check if the link element exists and has an href
+                    if (urlElement && urlElement.href) {
+                        // Prevent the default spacebar action (e.g., scrolling)
+                        event.preventDefault();
+                        // Programmatically click the link
+                        urlElement.click();
+                    }
                 }
             });
         });
