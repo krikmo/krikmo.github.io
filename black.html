@@ -184,16 +184,16 @@
                 }
             });
 
-            // Spacebar press to open the link
+            // Spacebar or Enter press to open the link
             document.addEventListener('keydown', function(event) {
-                // Check if the pressed key is the spacebar and if a URL is loaded (hash exists)
-                if (event.code === 'Space' && window.location.hash) {
+                // Check if the pressed key is Space or Enter and if a URL is loaded (hash exists)
+                if ((event.code === 'Space' || event.code === 'Enter') && window.location.hash) {
                     // Don't trigger if user is typing in a prompt box
                     if (event.target.tagName === 'BODY') {
                         const urlElement = document.getElementById('url');
                         // Check if the link element exists and has an href
                         if (urlElement && urlElement.href) {
-                            // Prevent the default spacebar action (e.g., scrolling)
+                            // Prevent the default key action (e.g., scrolling)
                             event.preventDefault();
                             // Programmatically click the link
                             urlElement.click();
