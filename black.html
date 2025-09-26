@@ -186,8 +186,8 @@
 
             // Spacebar or Enter press to open the link
             document.addEventListener('keydown', function(event) {
-                // Check if the pressed key is Space or Enter and if a URL is loaded (hash exists)
-                if ((event.code === 'Space' || event.code === 'Enter') && window.location.hash) {
+                // Check if the pressed key is Space or either Enter key, and if a URL is loaded
+                if ((event.code === 'Space' || event.code === 'Enter' || event.code === 'NumpadEnter') && window.location.hash) {
                     // Don't trigger if user is typing in a prompt box
                     if (event.target.tagName === 'BODY') {
                         const urlElement = document.getElementById('url');
