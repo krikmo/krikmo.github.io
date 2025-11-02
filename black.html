@@ -86,6 +86,19 @@
                     if (entry.startsWith("url:")) url = entry.substr(4);
                     else if (entry.startsWith("title:")) title = entry.substr(6);
                 }
+                
+                // Check if URL is about:newtab
+                if (url && url.trim().toLowerCase() === 'about:newtab') {
+                    // Clear the hash and show input form
+                    window.history.replaceState(null, '', window.location.href.split('#')[0]);
+                    document.getElementById("input-form").style.display = "block";
+                    document.getElementById("title").textContent = '';
+                    document.getElementById("url").textContent = '';
+                    document.getElementById("url").removeAttribute("href");
+                    document.title = "black.html receiver saver";
+                    return;
+                }
+                
                 if (url) {
                     // Use cached title if available
                     if (!title) title = localStorage.getItem(`title-${url}`) || url;
@@ -97,6 +110,14 @@
             // Set URL from the input page form
             function submitFromInput() {
                 const url = document.getElementById("input-box").value;
+                
+                // Check if URL is about:newtab
+                if (url && url.trim().toLowerCase() === 'about:newtab') {
+                    // Clear input and don't proceed
+                    document.getElementById("input-box").value = '';
+                    return;
+                }
+                
                 if (url) {
                     updateFromHash(`url:${url}?|title:${url}`);
                     document.getElementById("input-form").style.display = "none";
@@ -110,6 +131,14 @@
                     return;
                 }
                 const url = data.split('?|').find(e => e.startsWith('url:')).substr(4);
+                
+                // Check if URL is about:newtab
+                if (url.trim().toLowerCase() === 'about:newtab') {
+                    window.history.replaceState(null, '', window.location.href.split('#')[0]);
+                    document.getElementById("input-form").style.display = "block";
+                    return;
+                }
+                
                 const title = data.split('?|').find(e => e.startsWith('title:')).substr(6);
                 localStorage.setItem(`title-${url}`, title); // Cache title
                 window.location.hash = `url:${url}?|title:${title}`;
