@@ -87,8 +87,8 @@
                     else if (entry.startsWith("title:")) title = entry.substr(6);
                 }
                 
-                // Check if URL is about:newtab
-                if (url && url.trim().toLowerCase() === 'about:newtab') {
+                // Check if URL is local empty
+                if (url && url.trim().toLowerCase() === 'about:newtab' || url.trim().toLowerCase() === 'about:home') {
                     // Clear the hash and show input form
                     window.history.replaceState(null, '', window.location.href.split('#')[0]);
                     document.getElementById("input-form").style.display = "block";
@@ -111,8 +111,8 @@
             function submitFromInput() {
                 const url = document.getElementById("input-box").value;
                 
-                // Check if URL is about:newtab
-                if (url && url.trim().toLowerCase() === 'about:newtab') {
+                // Check if URL is local empty
+                if (url && url.trim().toLowerCase() === 'about:newtab' || url.trim().toLowerCase() === 'about:home') {
                     // Clear input and don't proceed
                     document.getElementById("input-box").value = '';
                     return;
@@ -133,7 +133,7 @@
                 const url = data.split('?|').find(e => e.startsWith('url:')).substr(4);
                 
                 // Check if URL is about:newtab
-                if (url.trim().toLowerCase() === 'about:newtab') {
+                if (url && url.trim().toLowerCase() === 'about:newtab' || url.trim().toLowerCase() === 'about:home') {
                     window.history.replaceState(null, '', window.location.href.split('#')[0]);
                     document.getElementById("input-form").style.display = "block";
                     return;
