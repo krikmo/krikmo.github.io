@@ -9,125 +9,401 @@
         background-color: #808080;
         color: white;
         font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
     }
     .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .input-section {
+        margin-bottom: 20px;
     }
     input[type="text"] {
         width: 80%;
-        padding: 12px 20px;
-        margin: 8px 0;
+        max-width: 400px;
+        padding: 15px;
+        margin: 0 auto 10px;
         box-sizing: border-box;
         font-size: 18px;
         text-align: center;
         outline: none;
+        border: 2px solid #666;
+        border-radius: 8px;
+        background: #555;
+        color: white;
+        display: block;
     }
-    .result {
-        margin-top: 1rem;
+    input:focus {
+        border-color: #ccc;
     }
     button {
-        padding: 10px 20px;
+        padding: 15px 30px;
         font-size: 18px;
         cursor: pointer;
-        outline: none;
+        background: #444;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto;
     }
-    table {
-        width: 80%;
-        text-align: center;
-        margin-top: 1rem;
+    button:hover, button:active {
+        background: #666;
+    }
+    .result {
+        margin: 20px 0;
+        font-size: 24px;
+        font-weight: bold;
+        min-height: 40px;
+    }
+    .error {
+        color: #ff6b6b;
+    }
+    .success {
+        color: #4ecdc4;
+    }
+    .table-wrapper {
+        overflow-x: auto;
+        margin: 20px auto;
+        width: 90%;
+        max-width: 500px;
+        border-radius: 8px;
+        background: #555;
+    }
+    #world-table {
+        width: 100%;
         border-collapse: collapse;
+        table-layout: fixed;
     }
-    th, td {
-        border: 1px solid white;
-        padding: 8px;
+    #world-table th, #world-table td {
+        border: 1px solid #777;
+        padding: 12px;
+        text-align: center;
+        font-size: 14px;
+    }
+    #world-table th {
+        background: #444;
+    }
+    #world-table .brt-row {
+        background: #4ecdc4 !important;
+        color: #000;
+        font-weight: bold;
+    }
+    .examples {
+        margin: 20px 0;
+        font-size: 14px;
+        opacity: 0.9;
+    }
+    .source-info {
+        font-size: 16px;
+        opacity: 0.9;
+        margin-top: 10px;
+    }
+    @media (max-width: 768px) {
+        body { padding: 10px; }
+        input { width: 95%; padding: 20px; font-size: 20px; margin-bottom: 15px; }
+        button { padding: 20px 40px; font-size: 20px; }
+        .result { font-size: 28px; }
+        .container h1 { font-size: 28px; }
+        .table-wrapper {
+            width: 100%;
+            font-size: 12px;
+        }
+        #world-table th, #world-table td {
+            padding: 8px 4px;
+            min-width: 60px;
+        }
     }
 </style>
-<script>
-function convertTime() {
-    const input = document.getElementById("inputTime").value.trim();
-    const timePattern = /^(\d{1,2}):(\d{2})\s([A-Za-z]{2,3})$/;
-    const match = input.match(timePattern);
-
-    if (!match) {
-        document.getElementById("result").innerHTML = "Invalid input";
-        return;
-    }
-
-    const hour = parseInt(match[1], 10);
-    const minute = parseInt(match[2], 10);
-    const timezone = match[3].toUpperCase();
-
-const timezoneOffset = {
-    'PT': 4,
-    'PST': 5,
-    'PDT': 4,
-    'ET': 2,
-    'EST': 3,
-    'EDT': 2,
-    'CT': 3,
-    'CST': 4,
-    'CDT': 3,
-};
-
-
-    const offset = timezoneOffset[timezone];
-
-    if (typeof offset === 'undefined') {
-        document.getElementById("result").innerHTML = "Invalid timezone";
-        return;
-    }
-
-    let brtHour = hour + offset;
-    if (brtHour >= 24) {
-        brtHour -= 24;
-    }
-
-    const brtTime = `${brtHour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')} BRT`;
-
-    document.getElementById("result").innerHTML = brtTime;
-}
-</script>
 </head>
 <body>
 <div class="container">
-    <input type="text" id="inputTime" placeholder="Enter time (ex: 18:15 PT)">
-    <button id="convertBtn" onclick="convertTime()">Convert</button>
+    <h1>🕐 Timezone Converter</h1>
+    <p>DST-aware world clock! Enter time/TZ or leave blank for BRT now. 🚀</p>
+    
+    <div class="input-section">
+        <input type="text" id="inputTime" placeholder="e.g., 10AM PST, 10:00 AM PST, 10 PST, 915pm ET, now Shanghai" autofocus>
+        <button onclick="convertTime()">Convert ⚡</button>
+    </div>
+    
     <div class="result" id="result"></div>
-    <table>
-        <thead>
-            <tr>
-                <th>State</th>
-                <th>Standard</th>
-                <th>Daylight</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>California</td>
-                <td>Nov-Mar (PST)</td>
-                <td>Mar-Nov (PDT)</td>
-            </tr
-            <tr>
-                <td>New York</td>
-                <td>Nov-Mar (EST)</td>
-                <td>Mar-Nov (EDT)</td>
-            </tr>
-            <tr>
-                <td>Texas</td>
-                <td>Nov-Mar (CST)</td>
-                <td>Mar-Nov (CDT)</td>
-            </tr>
-            <tr>
-                <td>DC</td>
-                <td>Nov-Mar (EST)</td>
-                <td>Mar-Nov (EDT)</td>
-            </tr>
-        </tbody>
-    </table>
+    
+    <div class="examples">💡 All variations work: "10am pst", "10:00 PM ET", "13 CT" (24h), "915 Shanghai", blank = BRT now. Offline!</div>
+    
+    <div class="table-wrapper">
+        <table id="world-table">
+            <thead>
+                <tr>
+                    <th>Region</th>
+                    <th>Local Time</th>
+                    <th>BRT Diff</th>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+    </div>
 </div>
+
+<script>
+const BRT_IANA = 'America/Sao_Paulo';
+const tzMap = [
+    {pattern: 'BRT|BR', iana: 'America/Sao_Paulo'},
+    {pattern: 'PT|PST|PACIFIC', iana: 'America/Los_Angeles'},
+    {pattern: 'PDT', iana: 'America/Los_Angeles'},
+    {pattern: 'MT|MST|MOUNTAIN', iana: 'America/Denver'},
+    {pattern: 'MDT', iana: 'America/Denver'},
+    {pattern: 'CT|CST|CENTRAL|TEXAS', iana: 'America/Chicago'},
+    {pattern: 'CDT', iana: 'America/Chicago'},
+    {pattern: 'ET|EST|EASTERN|NY|DC', iana: 'America/New_York'},
+    {pattern: 'EDT', iana: 'America/New_York'},
+    {pattern: 'AT|AST|ATLANTIC', iana: 'America/Halifax'},
+    {pattern: 'ADT', iana: 'America/Halifax'},
+    {pattern: 'UTC|GMT|Z', iana: 'UTC'},
+    {pattern: 'CET|BERLIN|EUROPE', iana: 'Europe/Berlin'},
+    {pattern: 'WET|LISBON', iana: 'Europe/Lisbon'},
+    {pattern: 'EET', iana: 'Europe/Kyiv'},
+    {pattern: 'CHINA|SHANGHAI|BEIJING|CST', iana: 'Asia/Shanghai'}
+];
+
+const TABLE_ZONES = [
+    {region: 'Brazil', iana: 'America/Sao_Paulo'},
+    {region: 'Pacific Coast (PT)', iana: 'America/Los_Angeles'},
+    {region: 'Mountain (MT)', iana: 'America/Denver'},
+    {region: 'Central (CT)', iana: 'America/Chicago'},
+    {region: 'Eastern (ET)', iana: 'America/New_York'},
+    {region: 'Atlantic (AT)', iana: 'America/Halifax'},
+    {region: 'UTC', iana: 'UTC'},
+    {region: 'Europe CET', iana: 'Europe/Berlin'},
+    {region: 'China CST', iana: 'Asia/Shanghai'}
+];
+
+function findIana(abbr) {
+    abbr = abbr.toUpperCase();
+    for (let map of tzMap) {
+        if (new RegExp(map.pattern, 'i').test(abbr)) {
+            return map.iana;
+        }
+    }
+    return null;
+}
+
+function findIanaAbbr(iana) {
+    const parts = new Intl.DateTimeFormat('en-US', {timeZone: iana, timeZoneName: 'short'}).formatToParts(new Date());
+    return parts.find(p => p.type === 'timeZoneName')?.value || iana.split('/')[1] || '???';
+}
+
+function parseInput(input) {
+    if (!input.trim()) {
+        return { timeStr: 'now', sourceIana: BRT_IANA, targetIana: BRT_IANA, desc: 'BRT now' };
+    }
+    const words = input.split(/\s+/).filter(w => w.toLowerCase() !== 'to');
+    let tzList = [];
+    let timeParts = [];
+    for (let word of words) {
+        const iana = findIana(word);
+        if (iana) {
+            tzList.push(iana);
+        } else {
+            timeParts.push(word);
+        }
+    }
+    let timeStr = timeParts.join(' ').trim();
+    if (!timeStr) timeStr = 'now';
+    let sourceIana = tzList[0] || BRT_IANA;
+    let targetIana = tzList[1] || BRT_IANA;
+    let desc = `${timeStr} ${findIanaAbbr(sourceIana)} → ${findIanaAbbr(targetIana)}`;
+    return { timeStr, sourceIana, targetIana, desc };
+}
+
+function parseTimeStr(ts) {
+    if (ts.toLowerCase() === 'now') return null;
+
+    let hour = 0, min = 0;
+    let ap = null;
+
+    // Remove AM/PM first (case-insensitive)
+    let ts_lower = ts.toLowerCase();
+    let am_idx = ts_lower.indexOf('am');
+    let pm_idx = ts_lower.indexOf('pm');
+    if (am_idx !== -1) {
+        ap = 'a';
+        ts = ts.replace(/AM|am/i, '').trim();
+    } else if (pm_idx !== -1) {
+        ap = 'p';
+        ts = ts.replace(/PM|pm/i, '').trim();
+    }
+
+    // Now parse time: prefer colon
+    let colon_parts = ts.split(':');
+    if (colon_parts.length > 1) {
+        hour = parseInt(colon_parts[0].trim()) || 0;
+        let min_part = colon_parts.slice(1).join(':').replace(/[^0-9]/g, '').substring(0, 2);
+        min = parseInt(min_part) || 0;
+    } else {
+        // No colon: extract all digits
+        let digits_match = ts.match(/\d+/g);
+        let digits = digits_match ? digits_match.join('') : '';
+        if (!digits) throw new Error(`No valid digits in time: ${ts}`);
+        let dlen = digits.length;
+        if (dlen <= 2) {
+            hour = parseInt(digits) || 0;
+            min = 0;
+        } else {
+            // 3 digits: first 1 hour, last 2 min (915 → 9:15)
+            // 4 digits: first 2 hour, last 2 min (1015 → 10:15)
+            let h_digs = (dlen === 3) ? 1 : 2;
+            hour = parseInt(digits.substring(0, h_digs));
+            min = parseInt(digits.substring(h_digs));
+        }
+    }
+
+    // AM/PM adjustment
+    if (ap === 'p' && hour !== 12) hour += 12;
+    if (ap === 'a' && hour === 12) hour = 0;
+
+    // Clamp & validate (no throw post-clamp)
+    hour = Math.max(0, Math.min(23, hour));
+    min = Math.max(0, Math.min(59, min));
+
+    return { h: hour, m: min };
+}
+
+function formatTime(tz, epoch) {
+    const dt = new Date(epoch);
+    const fmt = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZoneName: 'short'
+    });
+    return fmt.format(dt);
+}
+
+function getOffsetMs(tz, utcEpoch) {
+    const date = new Date(utcEpoch);
+    const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    });
+    const parts = formatter.formatToParts(date);
+    const year = parseInt(parts.find(p => p.type === 'year').value);
+    const month = parseInt(parts.find(p => p.type === 'month').value) - 1;
+    const day = parseInt(parts.find(p => p.type === 'day').value);
+    const hour = parseInt(parts.find(p => p.type === 'hour').value);
+    const minute = parseInt(parts.find(p => p.type === 'minute').value);
+    const second = parseInt(parts.find(p => p.type === 'second')?.value || '00');
+    const naiveUtcMs = Date.UTC(year, month, day, hour, minute, second);
+    return naiveUtcMs - utcEpoch;
+}
+
+function getDateParts(tz, date = new Date()) {
+    const fmt = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz,
+        year: 'numeric', month: 'numeric', day: 'numeric',
+        hour: 'numeric', minute: 'numeric', hour12: false
+    });
+    const parts = fmt.formatToParts(date);
+    return {
+        year: parseInt(parts.find(p => p.type === 'year').value),
+        month: parseInt(parts.find(p => p.type === 'month').value),
+        day: parseInt(parts.find(p => p.type === 'day').value),
+        hour: parseInt(parts.find(p => p.type === 'hour').value),
+        minute: parseInt(parts.find(p => p.type === 'minute').value)
+    };
+}
+
+function updateWorldTable(utcEpoch) {
+    const tbody = document.getElementById('table-body');
+    const brtOffsetMs = getOffsetMs(BRT_IANA, utcEpoch);
+    let zones = TABLE_ZONES.map(z => {
+        const localOffsetMs = getOffsetMs(z.iana, utcEpoch);
+        const localTodMs = (utcEpoch + localOffsetMs) % 86400000;
+        const localTimeStr = formatTime(z.iana, utcEpoch);
+        const diffH = Math.round((localOffsetMs - brtOffsetMs) / 3600000);
+        const diffStr = diffH === 0 ? 'BRT' : (diffH > 0 ? `+${diffH}h` : `${diffH}h`);
+        return {
+            ...z,
+            localTimeStr,
+            diffStr,
+            sortKey: localTodMs,
+            isBrt: z.iana === BRT_IANA
+        };
+    });
+
+    const brtZone = zones.find(z => z.isBrt);
+    const others = zones.filter(z => !z.isBrt).sort((a, b) => a.sortKey - b.sortKey);
+    const sortedZones = [brtZone, ...others];
+
+    tbody.innerHTML = sortedZones.map(z =>
+        `<tr ${z.isBrt ? 'class="brt-row"' : ''}>
+            <td>${z.region}</td>
+            <td>${z.localTimeStr}</td>
+            <td>${z.diffStr}</td>
+        </tr>`
+    ).join('');
+}
+
+function convertTime() {
+    const input = document.getElementById('inputTime').value.trim();
+    const resultEl = document.getElementById('result');
+    let utcEpoch;
+
+    try {
+        const parsed = parseInput(input);
+        const { timeStr, sourceIana, targetIana, desc } = parsed;
+
+        if (timeStr.toLowerCase() === 'now') {
+            utcEpoch = Date.now();
+        } else {
+            const parsedTime = parseTimeStr(timeStr);
+            const todaySource = getDateParts(sourceIana);
+            todaySource.hour = parsedTime.h;
+            todaySource.minute = parsedTime.m;
+            const naiveLocalMs = Date.UTC(todaySource.year, todaySource.month - 1, todaySource.day, todaySource.hour, todaySource.minute);
+            const sourceOffsetMs = getOffsetMs(sourceIana, naiveLocalMs);
+            utcEpoch = naiveLocalMs - sourceOffsetMs;
+        }
+
+        const sourceDisplay = formatTime(sourceIana, utcEpoch);
+        const targetDisplay = formatTime(targetIana, utcEpoch);
+        const sourceParts = sourceDisplay.split(' ');
+        const targetParts = targetDisplay.split(' ');
+        const sameTz = sourceIana === targetIana ? ' (current! ⏰)' : '';
+
+        resultEl.innerHTML = `
+            <span class="success">
+                ${targetParts[0]} ${targetParts[1]}${sameTz}
+                <br><small>${sourceParts[0]} ${sourceParts[1]} → ${targetParts[1]} (${desc})</small>
+            </span>
+            <div class="source-info">From source TZ today (DST-aware)</div>
+        `;
+
+        updateWorldTable(utcEpoch);
+
+    } catch (e) {
+        resultEl.innerHTML = `<span class="error">❌ ${e.message}<br><small>Ex: "10AM PST", "10:00 PM ET", "915 Shanghai", blank for BRT now</small></span>`;
+        updateWorldTable(Date.now());
+    }
+}
+
+// Auto-load default BRT world clock
+document.addEventListener('DOMContentLoaded', () => {
+    convertTime();
+});
+
+// Enter key
+document.getElementById('inputTime').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') convertTime();
+});
+</script>
 </body>
 </html>
