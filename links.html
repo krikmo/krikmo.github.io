@@ -113,7 +113,7 @@
             color: #a8d5ff;
         }
 
-        /* Changed: Ordinary text uses a neutral color instead of the link blue. */
+        /* Changed: Ordinary text uses a neutral color instead of link blue. */
         .text-item {
             color: #d7d7d7;
             display: block;
@@ -151,7 +151,7 @@
             margin-top: 8px;
         }
 
-        /* Changed: Headers remain aligned correctly beside the delete button. */
+        /* Changed: Headers remain aligned beside the delete button. */
         .link-wrapper > strong {
             flex-grow: 1;
         }
@@ -177,7 +177,7 @@
     </div>
 
     <script>
-        // Changed: Applies the existing smart URL-prefix behavior.
+        // Applies the existing smart URL-prefix behavior.
         function prepareUrl(url) {
             let preparedUrl = url.trim();
 
@@ -190,7 +190,7 @@
             return preparedUrl;
         }
 
-        // Changed: Allows only complete standalone URLs to become full-line links.
+        // Allows only complete standalone URLs or bare domains.
         function isStandaloneLink(value) {
             const trimmedValue = value.trim();
 
@@ -208,11 +208,11 @@
                 }
             }
 
-            // Bare domains are accepted only when they occupy the entire line.
+            // Bare domains are accepted when they occupy the entire line.
             return /^(?:www\.)?(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)\.)+[a-zA-Z]{2,}(?::\d{1,5})?(?:[/?#][^\s]*)?$/.test(trimmedValue);
         }
 
-        // Changed: Creates a link using the page's existing link behavior.
+        // Creates a link using the page's existing link behavior.
         function createLinkElement(url, label, className) {
             const linkElement = document.createElement('a');
             linkElement.href = prepareUrl(url);
@@ -224,30 +224,30 @@
             return linkElement;
         }
 
-        // Changed: Removes one complete input line and one following blank line.
+        // Removes one complete input line and one following blank line.
         function createDeleteButton(trimmedLine) {
             const deleteButton = document.createElement('button');
             deleteButton.className = 'delete-button';
             deleteButton.innerHTML = '×';
 
             deleteButton.onclick = function() {
-                // Get current RAW lines (preserve empty lines)
+                // Get current RAW lines and preserve empty lines.
                 const currentLines = document.getElementById('linkInput').value.split('\n');
 
-                // Find exact line index using original trim comparison
+                // Find the first line with matching trimmed content.
                 const lineIndex = currentLines.findIndex(l => l.trim() === trimmedLine);
 
                 if (lineIndex > -1) {
-                    // 1. Remove the target line
+                    // Remove the target line.
                     currentLines.splice(lineIndex, 1);
 
-                    // 2. Remove following empty line if exists
+                    // Remove one following empty line if it exists.
                     if (lineIndex < currentLines.length &&
                         currentLines[lineIndex].trim() === '') {
                         currentLines.splice(lineIndex, 1);
                     }
 
-                    // Update textarea and trigger refresh
+                    // Update the textarea and refresh the rendered output.
                     document.getElementById('linkInput').value = currentLines.join('\n');
                     document.getElementById('linkInput').dispatchEvent(new Event('input'));
                 }
@@ -256,14 +256,14 @@
             return deleteButton;
         }
 
-        // Changed: Converts Markdown links, basic styling, and inline raw URLs.
+        // Converts Markdown links, styling, and inline URLs into safe elements.
         function appendInlineMarkdown(text, parent) {
             let index = 0;
 
             while (index < text.length) {
                 const remainingText = text.slice(index);
 
-                // Handle Markdown links: [Text](link.com)
+                // Handle Markdown links: [Text](link.com).
                 const markdownLinkMatch = remainingText.match(/^\[([^\]\n]+)\]\(([^)\n]+)\)/);
 
                 if (markdownLinkMatch) {
@@ -273,14 +273,14 @@
                         'inline-link'
                     );
 
-                    // Allow basic Markdown styling inside the link label.
+                    // Allow Markdown styling inside the link label.
                     appendInlineMarkdown(markdownLinkMatch[1], linkElement);
                     parent.appendChild(linkElement);
                     index += markdownLinkMatch[0].length;
                     continue;
                 }
 
-                // Handle bold text: **text** or __text__
+                // Handle bold text: **text** or __text__.
                 const boldMatch = remainingText.match(/^(\*\*|__)(?=\S)([\s\S]*?\S)\1/);
 
                 if (boldMatch) {
@@ -291,7 +291,7 @@
                     continue;
                 }
 
-                // Handle crossed-out text: ~~text~~
+                // Handle crossed-out text: ~~text~~.
                 const strikeMatch = remainingText.match(/^~~(?=\S)([\s\S]*?\S)~~/);
 
                 if (strikeMatch) {
@@ -302,7 +302,7 @@
                     continue;
                 }
 
-                // Handle italic text: *text* or _text_
+                // Handle italic text: *text* or _text_.
                 const italicMatch = remainingText.match(/^(\*|_)(?=\S)([\s\S]*?\S)\1/);
 
                 if (italicMatch) {
@@ -340,6 +340,41 @@
                     continue;
                 }
 
+                // Handle bare domains anywhere in ordinary text.
+                const previousCharacter = index > 0 ? text[index - 1] : '';
+                const validDomainBoundary =
+                    index === 0 || !/[A-Za-z0-9@_-]/.test(previousCharacter);
+
+                if (validDomainBoundary) {
+                    const bareDomainMatch = remainingText.match(
+                        /^(?:www\.)?(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)\.)+[a-zA-Z]{2,}(?::\d{1,5})?(?:[/?#][^\s<>"']*)?/
+                    );
+
+                    if (bareDomainMatch) {
+                        let bareDomain = bareDomainMatch[0];
+                        let trailingText = '';
+
+                        // Keep common punctuation outside the clickable domain.
+                        while (/[.,!?;:)]$/.test(bareDomain)) {
+                            trailingText = bareDomain.slice(-1) + trailingText;
+                            bareDomain = bareDomain.slice(0, -1);
+                        }
+
+                        if (bareDomain) {
+                            parent.appendChild(
+                                createLinkElement(bareDomain, bareDomain, 'inline-link')
+                            );
+                        }
+
+                        if (trailingText) {
+                            parent.appendChild(document.createTextNode(trailingText));
+                        }
+
+                        index += bareDomainMatch[0].length;
+                        continue;
+                    }
+                }
+
                 // Preserve ordinary text one character at a time.
                 parent.appendChild(document.createTextNode(text[index]));
                 index++;
@@ -347,36 +382,36 @@
         }
 
         document.getElementById('linkInput').addEventListener('input', function() {
-            // Get all lines including empty ones
+            // Get all lines including empty ones.
             const lines = this.value.split('\n');
             const linkContainer = document.getElementById('linkContainer');
             linkContainer.innerHTML = '';
 
             lines.forEach(line => {
                 const trimmedLine = line.trim();
-                if (!trimmedLine) return; // Skip empty lines
+                if (!trimmedLine) return; // Skip empty lines.
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'link-wrapper';
 
-                // Changed: Every non-empty line now receives a delete button.
+                // Every non-empty line receives a delete button.
                 const deleteButton = createDeleteButton(trimmedLine);
 
-                // Handle headers (# prefix)
+                // Handle headers (# prefix).
                 if (trimmedLine.startsWith('#')) {
                     const headerElement = document.createElement('strong');
-                    headerElement.textContent = line; // Preserve original spacing
+                    headerElement.textContent = line; // Preserve original spacing.
                     wrapper.appendChild(deleteButton);
                     wrapper.appendChild(headerElement);
                 }
-                // Handle separators (---)
+                // Handle separators (---).
                 else if (/^-{3,}$/.test(trimmedLine)) {
                     const hr = document.createElement('hr');
                     hr.style.borderColor = '#404040';
                     wrapper.appendChild(deleteButton);
                     wrapper.appendChild(hr);
                 }
-                // Handle standalone links and inline Markdown/text content
+                // Handle standalone links and inline Markdown/text content.
                 else {
                     // Standalone URLs retain the original full-link appearance.
                     if (isStandaloneLink(trimmedLine)) {
