@@ -127,14 +127,14 @@
             const lines = this.value.split('\n');
             const linkContainer = document.getElementById('linkContainer');
             linkContainer.innerHTML = '';
-        
+
             lines.forEach(line => {
                 const trimmedLine = line.trim();
                 if (!trimmedLine) return; // Skip empty lines
-        
+
                 const wrapper = document.createElement('div');
                 wrapper.className = 'link-wrapper';
-        
+
                 // Handle headers (# prefix)
                 if (trimmedLine.startsWith('#')) {
                     const headerElement = document.createElement('strong');
@@ -147,16 +147,22 @@
                     hr.style.borderColor = '#404040';
                     wrapper.innerHTML = '<hr>';
                 }
-                // Handle links and other text
+                // Handle Markdown links, regular links, and other text
                 else {
-                    // Auto-add https:// prefix if missing
-                    let url = trimmedLine;
-                    if (!url.startsWith('http://') && 
-                        !url.startsWith('https://') && 
+                    // Extract Markdown label and destination from [Text](link).
+                    const markdownMatch = trimmedLine.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+                    const displayText = markdownMatch ? markdownMatch[1] : line;
+
+                    // Use the Markdown destination or the complete original line.
+                    let url = markdownMatch ? markdownMatch[2].trim() : trimmedLine;
+
+                    // Auto-add https:// prefix if the destination has no supported scheme.
+                    if (!url.startsWith('http://') &&
+                        !url.startsWith('https://') &&
                         !url.startsWith('file://')) {
                         url = 'https://' + url;
                     }
-        
+
                     // Delete button setup
                     const deleteButton = document.createElement('button');
                     deleteButton.className = 'delete-button';
@@ -164,34 +170,34 @@
                     deleteButton.onclick = function() {
                         // Get current RAW lines (preserve empty lines)
                         const currentLines = document.getElementById('linkInput').value.split('\n');
-                        
+
                         // Find exact line index using original trim comparison
                         const lineIndex = currentLines.findIndex(l => l.trim() === trimmedLine);
-                        
+
                         if (lineIndex > -1) {
                             // 1. Remove the target line
                             currentLines.splice(lineIndex, 1);
-                            
+
                             // 2. Remove following empty line if exists
-                            if (lineIndex < currentLines.length && 
+                            if (lineIndex < currentLines.length &&
                                 currentLines[lineIndex].trim() === '') {
                                 currentLines.splice(lineIndex, 1);
                             }
-                            
+
                             // Update textarea and trigger refresh
                             document.getElementById('linkInput').value = currentLines.join('\n');
                             document.getElementById('linkInput').dispatchEvent(new Event('input'));
                         }
                     };
-        
+
                     // Link element setup
                     const linkElement = document.createElement('a');
                     linkElement.href = url;
                     linkElement.className = 'link-item';
-                    linkElement.textContent = line; // Preserve original formatting
+                    linkElement.textContent = displayText; // Show Markdown text or the original line
                     linkElement.target = '_blank';
                     linkElement.rel = 'noreferrer noopener';
-                    
+
                     wrapper.appendChild(deleteButton);
                     wrapper.appendChild(linkElement);
                 }
