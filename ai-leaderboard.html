@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AA Intelligence Leaderboard</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        .font-display {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .leaderboard-table {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow:
+                0 10px 15px -3px rgb(0 0 0 / 0.1),
+                0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .leaderboard-table th {
+            background-color: #1e2937;
+            color: #e2e8f0;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.025em;
+            padding: 10px 12px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.1s ease;
+            white-space: nowrap;
+        }
+
+        .leaderboard-table th:hover {
+            background-color: #334155;
+        }
+
+        .leaderboard-table th.sorted {
+            background-color: #334155;
+            color: #818cf8;
+        }
+
+        .leaderboard-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #334155;
+            transition: background-color 0.1s ease;
+            white-space: nowrap;
+        }
+
+        .leaderboard-table tr:hover td {
+            background-color: #1e2937;
+        }
+
+        .leaderboard-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .intelligence-score {
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .sort-arrow {
+            opacity: 0.4;
+            transition: all 0.2s ease;
+        }
+
+        .sorted .sort-arrow {
+            opacity: 1;
+            color: #818cf8;
+        }
+
+        .model-name {
+            font-weight: 600;
+            color: #f1e7ff;
+        }
+
+        .provider-pill,
+        .license-pill {
+            font-size: 0.65rem;
+            padding: 1px 8px;
+            border-radius: 9999px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .metric-bar {
+            height: 3.5px;
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            border-radius: 9999px;
+            transition: width 0.4s ease;
+        }
+
+        .price-cell,
+        .perf-cell {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Max Cost popover */
+        .cost-popover-trigger {
+            position: relative;
+        }
+
+        .cost-popover {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1e2937;
+            border: 1px solid #475569;
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: none;
+            z-index: 100;
+            white-space: nowrap;
+            box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.4);
+            font-size: 0.7rem;
+        }
+
+        .cost-popover::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #475569;
+        }
+
+        .cost-popover-trigger:hover .cost-popover,
+        .cost-popover-trigger:focus-within .cost-popover {
+            display: block;
+        }
+
+        .cost-popover label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            padding: 2px 0;
+            color: #e2e8f0;
+        }
+
+        .cost-popover input[type="checkbox"] {
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-200">
+    <!-- Header -->
+    <div class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-lg sticky top-0 z-50">
+        <div class="max-w-screen-2xl mx-auto px-6 py-5">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-x-4">
+                    <div class="flex items-center gap-x-3">
+                        <div class="w-11 h-11 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                            <i class="fa-solid fa-chart-line text-white text-2xl"></i>
+                        </div>
+
+                        <div>
+                            <h1 class="font-display text-3xl font-semibold tracking-tighter">
+                                Artificial Analysis
+                            </h1>
+                            <p class="text-[10px] text-slate-400 -mt-1 tracking-[2px]">
+                                INTELLIGENCE INDEX
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <a
+                        href="https://artificialanalysis.ai/leaderboards/models"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-x-2 px-5 py-2.5 bg-white text-slate-900 hover:bg-slate-100 transition-all rounded-3xl text-sm font-semibold"
+                    >
+                        <span>View Full Leaderboard</span>
+                        <i class="fa-solid fa-external-link-alt text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-screen-2xl mx-auto px-6 pt-8 pb-16">
+        <!-- Hero -->
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-y-4 mb-8">
+            <div>
+                <div class="inline-flex items-center gap-x-2 bg-slate-900 border border-slate-700 text-indigo-400 text-xs font-semibold tracking-widest px-4 py-1.5 rounded-3xl mb-3">
+                    <i class="fa-solid fa-tachometer-alt"></i>
+                    <span>LEADERBOARD</span>
+                </div>
+
+                <h2 class="font-display text-5xl tracking-tighter font-semibold">
+                    Intelligence Leaderboard
+                </h2>
+
+                <p class="mt-2 text-lg text-slate-400">
+                    Sortable by any column • Includes speed &amp; latency metrics
+                </p>
+            </div>
+
+            <div class="flex items-center gap-x-4 text-sm">
+                <div class="bg-slate-900 border border-slate-700 rounded-3xl px-5 py-3 flex items-center gap-x-6">
+                    <div>
+                        <div class="text-xs text-slate-400">MODELS</div>
+                        <div id="model-count" class="font-semibold text-2xl text-white tabular-nums">
+                            72
+                        </div>
+                    </div>
+
+                    <div class="h-8 w-px bg-slate-700"></div>
+
+                    <div>
+                        <div class="text-xs text-slate-400">AVG INTELLIGENCE</div>
+                        <div id="avg-intelligence" class="font-semibold text-2xl text-white tabular-nums">
+                            43.2
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex flex-col xl:flex-row gap-3 mb-6 xl:items-center">
+            <div class="relative flex-1 max-w-md">
+                <i class="fa-solid fa-search absolute left-5 top-4 text-slate-500"></i>
+
+                <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Search model, creator..."
+                    oninput="filterAndRender()"
+                    class="w-full bg-slate-900 border border-slate-700 focus:border-indigo-500 transition-colors pl-12 pr-5 py-3.5 rounded-3xl text-sm placeholder:text-slate-500 focus:outline-none"
+                >
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2 text-sm">
+                <div class="px-4 py-2 bg-slate-900 border border-slate-700 rounded-3xl flex items-center gap-x-2 text-xs">
+                    <span class="text-slate-400">Default:</span>
+                    <span class="font-semibold text-indigo-400">Intelligence ↓</span>
+                </div>
+
+                <!-- Minimum Intelligence selector -->
+                <div class="px-4 py-2 bg-slate-900 border border-slate-700 rounded-3xl flex items-center gap-x-2 text-xs">
+                    <span class="text-slate-400">Min. Intelligence:</span>
+
+                    <select
+                        id="min-intel"
+                        onchange="filterAndRender()"
+                        class="bg-slate-800 text-indigo-400 font-semibold rounded-3xl px-2 py-1 focus:outline-none border-0 cursor-pointer"
+                    >
+                        <option value="0" selected>All</option>
+                        <option value="avg-intelligence">Average</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="31">31</option>
+                        <option value="32">32</option>
+                        <option value="33">33</option>
+                        <option value="34">34</option>
+                        <option value="35">35</option>
+                        <option value="36">36</option>
+                        <option value="37">37</option>
+                        <option value="38">38</option>
+                        <option value="39">39</option>
+                        <option value="40">40</option>
+                        <option value="41">41</option>
+                        <option value="42">42</option>
+                        <option value="43">43</option>
+                        <option value="44">44</option>
+                        <option value="45">45</option>
+                        <option value="46">46</option>
+                        <option value="47">47</option>
+                        <option value="48">48</option>
+                        <option value="49">49</option>
+                        <option value="50">50</option>
+                        <option value="51">51</option>
+                        <option value="52">52</option>
+                        <option value="53">53</option>
+                        <option value="54">54</option>
+                        <option value="55">55</option>
+                        <option value="56">56</option>
+                        <option value="57">57</option>
+                        <option value="58">58</option>
+                        <option value="59">59</option>
+                        <option value="60">60</option>
+                        <option value="61">61</option>
+                    </select>
+                </div>
+
+                <!-- Maximum Cost filter -->
+                <div
+                    class="px-4 py-2 bg-slate-900 border border-slate-700 rounded-3xl flex items-center gap-x-2 text-xs cost-popover-trigger"
+                    tabindex="0"
+                >
+                    <span class="text-slate-400">Max Cost:</span>
+
+                    <input
+                        id="max-cost"
+                        type="text"
+                        inputmode="decimal"
+                        placeholder="—"
+                        oninput="filterAndRender()"
+                        class="bg-slate-800 text-indigo-400 font-semibold rounded-3xl px-3 py-1 focus:outline-none border-0 cursor-text w-16 text-center placeholder:text-slate-600"
+                    >
+
+                    <div class="cost-popover">
+                        <div class="text-slate-400 text-[10px] uppercase tracking-wider mb-1.5 text-center">
+                            Filter By
+                        </div>
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                id="cost-filter-input"
+                                checked
+                                onchange="filterAndRender()"
+                            >
+                            <span>input</span>
+                        </label>
+
+                        <label>
+                            <input
+                                type="checkbox"
+                                id="cost-filter-output"
+                                onchange="filterAndRender()"
+                            >
+                            <span>output</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    onclick="resetSort()"
+                    class="px-4 py-2 text-xs flex items-center gap-x-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-3xl transition-colors"
+                >
+                    <i class="fa-solid fa-undo text-xs"></i>
+                    <span>Reset</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="leaderboard-table bg-slate-900 border border-slate-700 rounded-3xl overflow-hidden shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[1500px]">
+                    <thead>
+                        <tr>
+                            <th onclick="sortBy('rank')" class="w-16 text-center">
+                                # <i class="fa-solid fa-sort sort-arrow fa-xs ml-1"></i>
+                            </th>
+
+                            <th onclick="sortBy('model')" class="text-left min-w-[280px]">
+                                Model <i class="fa-solid fa-sort sort-arrow fa-xs ml-1"></i>
+                            </th>
+
+                            <th onclick="sortBy('creator')" class="text-left w-36">
+                                Creator <i class="fa-solid fa-sort sort-arrow fa-xs ml-1"></i>
+                            </th>
+
+                            <th onclick="sortBy('license')" class="text-center w-24">
+                                License <i class="fa-solid fa-sort sort-arrow fa-xs ml-1"></i>
+                            </th>
+
+                            <th onclick="sortBy('contextWindow')" class="text-center w-28">
+                                Context <i class="fa-solid fa-sort sort-arrow fa-xs ml-1"></i>
+                            </th>
+
+                            <th onclick="sortBy('intelligenceNumeric')" class="text-center w-36 sorted">
+                                Intelligence <i class="fa-solid fa-sort-down sort-arrow fa-sm ml-1 text-indigo-400"></i>
+                            </th>
+
+                            <th onclick="sortBy('inputPrice')" class="text-center w-24">
+                                Input <i class="fa-solid fa-sort sort-arrow fa-xs ml-1"></i>
+                            </th>
+
+                            <th onclick="sortBy('outputPrice')" class="text-center w-24">
+                                Output <i class="fa-solid fa-sort sort-arrow fa-xs ml-1"></i>
+                            </th>
+
+                            <th onclick="sortBy('medianTokensPerSec')" class="text-center w-24">
+                                Speed <i class="fa-solid fa-sort sort-arrow fa-xs ml-1"></i>
+                            </th>
+
+                            <th onclick="sortBy('latencyFirstChunkSec')" class="text-center w-28">
+                                Latency <i class="fa-solid fa-sort sort-arrow fa-xs ml-1"></i>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="table-body" class="text-sm divide-y divide-slate-700">
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-4 text-xs text-slate-500 px-2 flex flex-col lg:flex-row gap-2 justify-between lg:items-center">
+            <div>
+                Data from
+                <a
+                    href="https://artificialanalysis.ai/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-indigo-400 hover:underline"
+                >
+                    Artificial Analysis
+                </a>
+            </div>
+
+            <div>
+                Click any column header to sort • Prices in USD per 1M tokens •
+                Speed = median tokens/sec • Latency = time to first chunk (s)
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function initializeTailwind() {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            display: [
+                                'Space Grotesk',
+                                'Inter',
+                                'system-ui',
+                                'sans-serif'
+                            ]
+                        }
+                    }
+                }
+            };
+        }
+
+        // Intelligence, pricing, speed and latency data.
+const rawData = [
+  {
+    "model": "Claude Opus 5 (max)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 63,
+    "blended": 2.34,
+    "inputPrice": 5.00,
+    "outputPrice": 25.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 52,
+    "latencyFirstChunkSec": 63.92
+  },
+  {
+    "model": "Claude Opus 5 (xhigh)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 63,
+    "blended": 1.80,
+    "inputPrice": 5.00,
+    "outputPrice": 25.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 52,
+    "latencyFirstChunkSec": 25.75
+  },
+  {
+    "model": "Claude Fable 5 (with fallback)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 62,
+    "blended": 3.14,
+    "inputPrice": 10.00,
+    "outputPrice": 50.00,
+    "cacheRead": 1.00,
+    "cacheWrite": 12.50,
+    "medianTokensPerSec": 63,
+    "latencyFirstChunkSec": 107.76
+  },
+  {
+    "model": "Claude Opus 5 (high)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 61,
+    "blended": 1.23,
+    "inputPrice": 5.00,
+    "outputPrice": 25.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 51,
+    "latencyFirstChunkSec": 13.43
+  },
+  {
+    "model": "GPT-5.6 Sol (max)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 61,
+    "blended": 1.23,
+    "inputPrice": 5.00,
+    "outputPrice": 30.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 60,
+    "latencyFirstChunkSec": 176.57
+  },
+  {
+    "model": "Grok 4.6 (high)",
+    "contextWindow": "500k",
+    "creator": "SpaceXAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 61,
+    "blended": 0.84,
+    "inputPrice": 2.00,
+    "outputPrice": 6.00,
+    "cacheRead": 0.50,
+    "cacheWrite": null,
+    "medianTokensPerSec": 66,
+    "latencyFirstChunkSec": 32.30
+  },
+  {
+    "model": "Kimi K3 (max)",
+    "contextWindow": "1.05M",
+    "creator": "Kimi",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 60,
+    "blended": 0.84,
+    "inputPrice": 3.00,
+    "outputPrice": 15.00,
+    "cacheRead": 0.30,
+    "cacheWrite": null,
+    "medianTokensPerSec": 40,
+    "latencyFirstChunkSec": 2.84
+  },
+  {
+    "model": "GPT-5.6 Sol (xhigh)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 59,
+    "blended": 0.81,
+    "inputPrice": 5.00,
+    "outputPrice": 30.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 60,
+    "latencyFirstChunkSec": 42.53
+  },
+  {
+    "model": "Claude Opus 5 (medium)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 59,
+    "blended": 0.72,
+    "inputPrice": 5.00,
+    "outputPrice": 25.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 49,
+    "latencyFirstChunkSec": 8.59
+  },
+  {
+    "model": "Qwen3.8 Max",
+    "contextWindow": "1M",
+    "creator": "Alibaba",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 58,
+    "blended": 1.13,
+    "inputPrice": 2.00,
+    "outputPrice": 6.00,
+    "cacheRead": 0.25,
+    "cacheWrite": null,
+    "medianTokensPerSec": 47,
+    "latencyFirstChunkSec": 2.67
+  },
+  {
+    "model": "GPT-5.6 Sol (high)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 57,
+    "blended": 0.55,
+    "inputPrice": 5.00,
+    "outputPrice": 30.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 56,
+    "latencyFirstChunkSec": 19.28
+  },
+  {
+    "model": "Muse Spark 1.2 (xhigh)",
+    "contextWindow": "1.05M",
+    "creator": "Meta",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 57,
+    "blended": 0.40,
+    "inputPrice": 1.25,
+    "outputPrice": 4.25,
+    "cacheRead": 0.15,
+    "cacheWrite": null,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
+  },
+  {
+    "model": "GPT-5.6 Terra (max)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 57,
+    "blended": 0.51,
+    "inputPrice": 2.00,
+    "outputPrice": 12.00,
+    "cacheRead": 0.20,
+    "cacheWrite": 2.50,
+    "medianTokensPerSec": 115,
+    "latencyFirstChunkSec": 184.53
+  },
+  {
+    "model": "Grok 4.5 (high)",
+    "contextWindow": "500k",
+    "creator": "SpaceXAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 56,
+    "blended": 0.36,
+    "inputPrice": 2.00,
+    "outputPrice": 6.00,
+    "cacheRead": 0.30,
+    "cacheWrite": null,
+    "medianTokensPerSec": 58,
+    "latencyFirstChunkSec": 9.32
+  },
+  {
+    "model": "GPT-5.6 Sol (medium)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 56,
+    "blended": 0.37,
+    "inputPrice": 5.00,
+    "outputPrice": 30.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 56,
+    "latencyFirstChunkSec": 6.12
+  },
+  {
+    "model": "Claude Sonnet 5 (max)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 55,
+    "blended": 1.72,
+    "inputPrice": 2.00,
+    "outputPrice": 10.00,
+    "cacheRead": 0.20,
+    "cacheWrite": 2.50,
+    "medianTokensPerSec": 69,
+    "latencyFirstChunkSec": 202.04
+  },
+  {
+    "model": "DeepSeek V4 Pro 0813 (max)",
+    "contextWindow": "1M",
+    "creator": "DeepSeek",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 53,
+    "blended": 0.06,
+    "inputPrice": 0.43,
+    "outputPrice": 0.87,
+    "cacheRead": 0.00,
+    "cacheWrite": null,
+    "medianTokensPerSec": 83,
+    "latencyFirstChunkSec": 1.63
+  },
+  {
+    "model": "GPT-5.6 Terra (xhigh)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 53,
+    "blended": 0.31,
+    "inputPrice": 2.00,
+    "outputPrice": 12.00,
+    "cacheRead": 0.20,
+    "cacheWrite": 2.50,
+    "medianTokensPerSec": 94,
+    "latencyFirstChunkSec": 28.77
+  },
+  {
+    "model": "GLM-5.2 (max)",
+    "contextWindow": "1M",
+    "creator": "Z AI",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 53,
+    "blended": 0.32,
+    "inputPrice": 1.40,
+    "outputPrice": 4.40,
+    "cacheRead": 0.23,
+    "cacheWrite": 0.00,
+    "medianTokensPerSec": 117,
+    "latencyFirstChunkSec": 1.42
+  },
+  {
+    "model": "Claude Opus 5 (low)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 52,
+    "blended": 0.43,
+    "inputPrice": 5.00,
+    "outputPrice": 25.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 49,
+    "latencyFirstChunkSec": 3.04
+  },
+  {
+    "model": "GPT-5.6 Luna (max)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 52,
+    "blended": 0.05,
+    "inputPrice": 0.20,
+    "outputPrice": 1.20,
+    "cacheRead": 0.02,
+    "cacheWrite": 0.25,
+    "medianTokensPerSec": 150,
+    "latencyFirstChunkSec": 137.88
+  },
+  {
+    "model": "DeepSeek V4 Flash 0731 (max)",
+    "contextWindow": "1M",
+    "creator": "DeepSeek",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 52,
+    "blended": 0.03,
+    "inputPrice": 0.14,
+    "outputPrice": 0.28,
+    "cacheRead": 0.00,
+    "cacheWrite": null,
+    "medianTokensPerSec": 115,
+    "latencyFirstChunkSec": 1.43
+  },
+  {
+    "model": "Gemini 3.6 Flash",
+    "contextWindow": "1M",
+    "creator": "Google",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 52,
+    "blended": 0.56,
+    "inputPrice": 1.50,
+    "outputPrice": 7.50,
+    "cacheRead": 0.15,
+    "cacheWrite": null,
+    "medianTokensPerSec": 221,
+    "latencyFirstChunkSec": 17.76
+  },
+  {
+    "model": "GPT-5.6 Sol (low)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 51,
+    "blended": 0.23,
+    "inputPrice": 5.00,
+    "outputPrice": 30.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 51,
+    "latencyFirstChunkSec": 3.07
+  },
+  {
+    "model": "GPT-5.6 Terra (high)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 50,
+    "blended": 0.22,
+    "inputPrice": 2.00,
+    "outputPrice": 12.00,
+    "cacheRead": 0.20,
+    "cacheWrite": 2.50,
+    "medianTokensPerSec": 96,
+    "latencyFirstChunkSec": 3.79
+  },
+  {
+    "model": "GPT-5.6 Luna (xhigh)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 50,
+    "blended": 0.03,
+    "inputPrice": 0.20,
+    "outputPrice": 1.20,
+    "cacheRead": 0.02,
+    "cacheWrite": 0.25,
+    "medianTokensPerSec": 144,
+    "latencyFirstChunkSec": 50.93
+  },
+  {
+    "model": "Kimi K3 (low)",
+    "contextWindow": "1.05M",
+    "creator": "Kimi",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 48,
+    "blended": 0.24,
+    "inputPrice": 3.00,
+    "outputPrice": 15.00,
+    "cacheRead": 0.30,
+    "cacheWrite": null,
+    "medianTokensPerSec": 37,
+    "latencyFirstChunkSec": 3.38
+  },
+  {
+    "model": "Gemini 3.1 Pro Preview",
+    "contextWindow": "1M",
+    "creator": "Google",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 48,
+    "blended": 0.33,
+    "inputPrice": 2.00,
+    "outputPrice": 12.00,
+    "cacheRead": 0.20,
+    "cacheWrite": null,
+    "medianTokensPerSec": 114,
+    "latencyFirstChunkSec": 30.00
+  },
+  {
+    "model": "Motif 3",
+    "contextWindow": "262k",
+    "creator": "Motif Technologies",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 47,
+    "blended": null,
+    "inputPrice": null,
+    "outputPrice": null,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
+  },
+  {
+    "model": "GPT-5.6 Luna (high)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 47,
+    "blended": 0.02,
+    "inputPrice": 0.20,
+    "outputPrice": 1.20,
+    "cacheRead": 0.02,
+    "cacheWrite": 0.25,
+    "medianTokensPerSec": 147,
+    "latencyFirstChunkSec": 16.98
+  },
+  {
+    "model": "GPT-5.6 Terra (medium)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 47,
+    "blended": 0.12,
+    "inputPrice": 2.00,
+    "outputPrice": 12.00,
+    "cacheRead": 0.20,
+    "cacheWrite": 2.50,
+    "medianTokensPerSec": 91,
+    "latencyFirstChunkSec": 1.78
+  },
+  {
+    "model": "Gemini 3.5 Flash (medium)",
+    "contextWindow": "1M",
+    "creator": "Google",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 47,
+    "blended": null,
+    "inputPrice": 1.50,
+    "outputPrice": 9.00,
+    "cacheRead": 0.15,
+    "cacheWrite": null,
+    "medianTokensPerSec": 159,
+    "latencyFirstChunkSec": 17.17
+  },
+  {
+    "model": "GPT-5.3 Codex (xhigh)",
+    "contextWindow": "400k",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 46,
+    "blended": null,
+    "inputPrice": 1.75,
+    "outputPrice": 14.00,
+    "cacheRead": 0.17,
+    "cacheWrite": null,
+    "medianTokensPerSec": 106,
+    "latencyFirstChunkSec": 74.62
+  },
+  {
+    "model": "MiniMax-M3",
+    "contextWindow": "1M",
+    "creator": "MiniMax",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 45,
+    "blended": 0.14,
+    "inputPrice": 0.30,
+    "outputPrice": 1.20,
+    "cacheRead": 0.06,
+    "cacheWrite": 0.38,
+    "medianTokensPerSec": 83,
+    "latencyFirstChunkSec": 1.74
+  },
+  {
+    "model": "Motif 3 (Beta)",
+    "contextWindow": "262k",
+    "creator": "Motif Technologies",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 45,
+    "blended": null,
+    "inputPrice": null,
+    "outputPrice": null,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
+  },
+  {
+    "model": "DeepSeek V4 Pro (max)",
+    "contextWindow": "1M",
+    "creator": "DeepSeek",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 45,
+    "blended": 0.05,
+    "inputPrice": 0.43,
+    "outputPrice": 0.87,
+    "cacheRead": 0.00,
+    "cacheWrite": null,
+    "medianTokensPerSec": 66,
+    "latencyFirstChunkSec": 1.67
+  },
+  {
+    "model": "DeepSeek V4 Pro (high)",
+    "contextWindow": "1M",
+    "creator": "DeepSeek",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 44,
+    "blended": 0.04,
+    "inputPrice": 0.43,
+    "outputPrice": 0.87,
+    "cacheRead": 0.00,
+    "cacheWrite": null,
+    "medianTokensPerSec": 66,
+    "latencyFirstChunkSec": 1.67
+  },
+  {
+    "model": "Kimi K2.7 Code",
+    "contextWindow": "256k",
+    "creator": "Kimi",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 43,
+    "blended": 0.22,
+    "inputPrice": 0.95,
+    "outputPrice": 4.00,
+    "cacheRead": 0.19,
+    "cacheWrite": null,
+    "medianTokensPerSec": 39,
+    "latencyFirstChunkSec": 2.88
+  },
+  {
+    "model": "MiMo-V2.5-Pro",
+    "contextWindow": "1M",
+    "creator": "Xiaomi",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 43,
+    "blended": 0.03,
+    "inputPrice": 0.43,
+    "outputPrice": 0.87,
+    "cacheRead": 0.00,
+    "cacheWrite": null,
+    "medianTokensPerSec": 46,
+    "latencyFirstChunkSec": 3.32
+  },
+  {
+    "model": "Claude Sonnet 5 (Non-reasoning)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 43,
+    "blended": 0.42,
+    "inputPrice": 2.00,
+    "outputPrice": 10.00,
+    "cacheRead": 0.20,
+    "cacheWrite": 2.50,
+    "medianTokensPerSec": 58,
+    "latencyFirstChunkSec": 1.82
+  },
+  {
+    "model": "Inkling",
+    "contextWindow": "1M",
+    "creator": "Thinking Machines",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 42,
+    "blended": 0.34,
+    "inputPrice": 1.00,
+    "outputPrice": 4.05,
+    "cacheRead": 0.17,
+    "cacheWrite": null,
+    "medianTokensPerSec": 76,
+    "latencyFirstChunkSec": 1.86
+  },
+  {
+    "model": "Hy3",
+    "contextWindow": "256k",
+    "creator": "Tencent",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 42,
+    "blended": 0.04,
+    "inputPrice": 0.14,
+    "outputPrice": 0.56,
+    "cacheRead": 0.03,
+    "cacheWrite": null,
+    "medianTokensPerSec": 63,
+    "latencyFirstChunkSec": 2.96
+  },
+  {
+    "model": "Nex-N2-Pro",
+    "contextWindow": "262k",
+    "creator": "Nex AGI",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 42,
+    "blended": null,
+    "inputPrice": 0.50,
+    "outputPrice": 2.50,
+    "cacheRead": 0.25,
+    "cacheWrite": null,
+    "medianTokensPerSec": 136,
+    "latencyFirstChunkSec": 1.68
+  },
+  {
+    "model": "GPT-5.6 Sol (Non-reasoning)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 42,
+    "blended": 0.24,
+    "inputPrice": 5.00,
+    "outputPrice": 30.00,
+    "cacheRead": 0.50,
+    "cacheWrite": 6.25,
+    "medianTokensPerSec": 57,
+    "latencyFirstChunkSec": 1.38
+  },
+  {
+    "model": "Solar Pro 4",
+    "contextWindow": "512k",
+    "creator": "Upstage",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 42,
+    "blended": null,
+    "inputPrice": 0.30,
+    "outputPrice": 1.20,
+    "cacheRead": 0.06,
+    "cacheWrite": null,
+    "medianTokensPerSec": 68,
+    "latencyFirstChunkSec": 2.20
+  },
+  {
+    "model": "GPT-5.6 Terra (low)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 41,
+    "blended": 0.09,
+    "inputPrice": 2.00,
+    "outputPrice": 12.00,
+    "cacheRead": 0.20,
+    "cacheWrite": 2.50,
+    "medianTokensPerSec": 88,
+    "latencyFirstChunkSec": 1.73
+  },
+  {
+    "model": "Inkling Small",
+    "contextWindow": "1M",
+    "creator": "Thinking Machines",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 41,
+    "blended": 0.07,
+    "inputPrice": 0.30,
+    "outputPrice": 1.20,
+    "cacheRead": 0.06,
+    "cacheWrite": null,
+    "medianTokensPerSec": 128,
+    "latencyFirstChunkSec": 1.66
+  },
+  {
+    "model": "JT-4.1 Flash 236B A21B",
+    "contextWindow": "256k",
+    "creator": "China Mobile",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 40,
+    "blended": null,
+    "inputPrice": null,
+    "outputPrice": null,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
+  },
+  {
+    "model": "Agnes 2.5 Pro Alpha",
+    "contextWindow": "1M",
+    "creator": "Sapiens AI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 40,
+    "blended": null,
+    "inputPrice": 0.45,
+    "outputPrice": 0.90,
+    "cacheRead": 0.00,
+    "cacheWrite": null,
+    "medianTokensPerSec": 131,
+    "latencyFirstChunkSec": 2.36
+  },
+  {
+    "model": "Qwen3.7 Plus",
+    "contextWindow": "1M",
+    "creator": "Alibaba",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 39,
+    "blended": 0.24,
+    "inputPrice": 0.40,
+    "outputPrice": 1.60,
+    "cacheRead": 0.04,
+    "cacheWrite": 0.50,
+    "medianTokensPerSec": 56,
+    "latencyFirstChunkSec": 2.13
+  },
+  {
+    "model": "GPT-5.6 Luna (medium)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 39,
+    "blended": 0.01,
+    "inputPrice": 0.20,
+    "outputPrice": 1.20,
+    "cacheRead": 0.02,
+    "cacheWrite": 0.25,
+    "medianTokensPerSec": 137,
+    "latencyFirstChunkSec": 2.23
+  },
+  {
+    "model": "Nemotron 3 Ultra",
+    "contextWindow": "262k",
+    "creator": "NVIDIA",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 38,
+    "blended": 0.38,
+    "inputPrice": 0.60,
+    "outputPrice": 2.75,
+    "cacheRead": 0.20,
+    "cacheWrite": null,
+    "medianTokensPerSec": 121,
+    "latencyFirstChunkSec": 2.51
+  },
+  {
+    "model": "MiMo-V2.5",
+    "contextWindow": "1M",
+    "creator": "Xiaomi",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 38,
+    "blended": 0.01,
+    "inputPrice": 0.14,
+    "outputPrice": 0.28,
+    "cacheRead": 0.00,
+    "cacheWrite": null,
+    "medianTokensPerSec": 84,
+    "latencyFirstChunkSec": 2.35
+  },
+  {
+    "model": "Ling 3.0 Flash",
+    "contextWindow": "262k",
+    "creator": "InclusionAI",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 38,
+    "blended": 0.04,
+    "inputPrice": 0.07,
+    "outputPrice": 0.22,
+    "cacheRead": 0.01,
+    "cacheWrite": null,
+    "medianTokensPerSec": 394,
+    "latencyFirstChunkSec": 2.01
+  },
+  {
+    "model": "Qwen3.6 27B",
+    "contextWindow": "262k",
+    "creator": "Alibaba",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 38,
+    "blended": 0.29,
+    "inputPrice": 0.60,
+    "outputPrice": 3.60,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": 54,
+    "latencyFirstChunkSec": 3.84
+  },
+  {
+    "model": "Gemini 3.5 Flash-Lite",
+    "contextWindow": "1M",
+    "creator": "Google",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 37,
+    "blended": 0.10,
+    "inputPrice": 0.30,
+    "outputPrice": 2.50,
+    "cacheRead": 0.03,
+    "cacheWrite": null,
+    "medianTokensPerSec": 357,
+    "latencyFirstChunkSec": 8.70
+  },
+  {
+    "model": "Solar Open2 250B",
+    "contextWindow": "1.05M",
+    "creator": "Upstage",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 37,
+    "blended": null,
+    "inputPrice": null,
+    "outputPrice": null,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
+  },
+  {
+    "model": "MiMo-V2-Omni-0327",
+    "contextWindow": "256k",
+    "creator": "Xiaomi",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 37,
+    "blended": null,
+    "inputPrice": null,
+    "outputPrice": null,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
+  },
+  {
+    "model": "Grok 4.3 (medium)",
+    "contextWindow": "1M",
+    "creator": "SpaceXAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 37,
+    "blended": null,
+    "inputPrice": 1.25,
+    "outputPrice": 2.50,
+    "cacheRead": 0.20,
+    "cacheWrite": 1.25,
+    "medianTokensPerSec": 114,
+    "latencyFirstChunkSec": 14.53
+  },
+  {
+    "model": "Grok 4.3 (low)",
+    "contextWindow": "1M",
+    "creator": "SpaceXAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 36,
+    "blended": null,
+    "inputPrice": 1.25,
+    "outputPrice": 2.50,
+    "cacheRead": 0.20,
+    "cacheWrite": 1.25,
+    "medianTokensPerSec": 112,
+    "latencyFirstChunkSec": 7.02
+  },
+  {
+    "model": "MiMo-V2-Omni",
+    "contextWindow": "256k",
+    "creator": "Xiaomi",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 36,
+    "blended": null,
+    "inputPrice": null,
+    "outputPrice": null,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
+  },
+  {
+    "model": "Gemini 3.5 Flash (minimal)",
+    "contextWindow": "1M",
+    "creator": "Google",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 36,
+    "blended": null,
+    "inputPrice": 1.50,
+    "outputPrice": 9.00,
+    "cacheRead": 0.15,
+    "cacheWrite": null,
+    "medianTokensPerSec": 147,
+    "latencyFirstChunkSec": 0.94
+  },
+  {
+    "model": "Claude Sonnet 4.6 (Non-reasoning, Low Effort)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 35,
+    "blended": null,
+    "inputPrice": 3.00,
+    "outputPrice": 15.00,
+    "cacheRead": 0.30,
+    "cacheWrite": 3.75,
+    "medianTokensPerSec": 44,
+    "latencyFirstChunkSec": 1.74
+  },
+  {
+    "model": "Muse Glimmer (high)",
+    "contextWindow": "131k",
+    "creator": "Meta",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 35,
+    "blended": 0.07,
+    "inputPrice": 0.32,
+    "outputPrice": 1.35,
+    "cacheRead": 0.04,
+    "cacheWrite": null,
+    "medianTokensPerSec": 101,
+    "latencyFirstChunkSec": 0.83
+  },
+  {
+    "model": "A.X-K2",
+    "contextWindow": "262k",
+    "creator": "SK Telecom",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 35,
+    "blended": null,
+    "inputPrice": null,
+    "outputPrice": null,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
+  },
+  {
+    "model": "GLM-5.2",
+    "contextWindow": "1M",
+    "creator": "Z AI",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 35,
+    "blended": null,
+    "inputPrice": 1.40,
+    "outputPrice": 4.40,
+    "cacheRead": 0.26,
+    "cacheWrite": null,
+    "medianTokensPerSec": 118,
+    "latencyFirstChunkSec": 1.85
+  },
+  {
+    "model": "GPT-5.6 Terra (Non-reasoning)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 35,
+    "blended": 0.10,
+    "inputPrice": 2.00,
+    "outputPrice": 12.00,
+    "cacheRead": 0.20,
+    "cacheWrite": 2.50,
+    "medianTokensPerSec": 90,
+    "latencyFirstChunkSec": 0.82
+  },
+  {
+    "model": "KAT-Coder-Pro V2",
+    "contextWindow": "256k",
+    "creator": "KwaiKAT",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 35,
+    "blended": null,
+    "inputPrice": 0.30,
+    "outputPrice": 1.20,
+    "cacheRead": 0.06,
+    "cacheWrite": null,
+    "medianTokensPerSec": 103,
+    "latencyFirstChunkSec": 1.51
+  },
+  {
+    "model": "LongCat 2.0",
+    "contextWindow": "1M",
+    "creator": "LongCat",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 34,
+    "blended": null,
+    "inputPrice": 0.75,
+    "outputPrice": 2.95,
+    "cacheRead": 0.01,
+    "cacheWrite": null,
+    "medianTokensPerSec": 39,
+    "latencyFirstChunkSec": 2.89
+  },
+  {
+    "model": "Qwen3.5 397B A17B",
+    "contextWindow": "262k",
+    "creator": "Alibaba",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 34,
+    "blended": 0.36,
+    "inputPrice": 0.60,
+    "outputPrice": 3.60,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": 81,
+    "latencyFirstChunkSec": 2.16
+  },
+  {
+    "model": "MiMo-V2-Flash (Feb 2026)",
+    "contextWindow": "256k",
+    "creator": "Xiaomi",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 34,
+    "blended": null,
+    "inputPrice": null,
+    "outputPrice": null,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
+  },
+  {
+    "model": "GPT-5.6 Luna (low)",
+    "contextWindow": "1M",
+    "creator": "OpenAI",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 34,
+    "blended": 0.01,
+    "inputPrice": 0.20,
+    "outputPrice": 1.20,
+    "cacheRead": 0.02,
+    "cacheWrite": 0.25,
+    "medianTokensPerSec": 136,
+    "latencyFirstChunkSec": 1.83
+  }
+];
+
+        // Convert intelligence values to sortable numbers while retaining
+        // starred source values such as "45*" for display.
+        let models = rawData.map((item, index) => {
+            const intelligenceDisplay = String(
+                item.artificialAnalysisIntelligenceIndex
+            );
+
+            const intelligenceNumeric = Number.parseFloat(
+                intelligenceDisplay.replace('*', '')
+            );
+
+            return {
+                ...item,
+                rank: index + 1,
+                intelligenceNumeric,
+                intelligenceDisplay
+            };
+        });
+
+        // Establish the permanent leaderboard rank from intelligence.
+        models.sort(
+            (a, b) =>
+                b.intelligenceNumeric - a.intelligenceNumeric ||
+                a.rank - b.rank
+        );
+
+        models.forEach((model, index) => {
+            model.rank = index + 1;
+        });
+
+        const avgIntelligenceAll =
+            models.reduce(
+                (sum, model) => sum + model.intelligenceNumeric,
+                0
+            ) / models.length;
+
+        const maxIntelligenceAll = Math.max(
+            ...models.map(model => model.intelligenceNumeric)
+        );
+
+        let currentSort = {
+            field: 'intelligenceNumeric',
+            direction: 'desc'
+        };
+
+        function formatPrice(value) {
+            if (value === null || value === undefined) {
+                return '—';
+            }
+
+            return '$' + Number(value).toFixed(2);
+        }
+
+        function formatPerformance(value, unit = '') {
+            if (value === null || value === undefined) {
+                return '—';
+            }
+
+            const decimals = unit === 's' ? 2 : 0;
+            return Number(value).toFixed(decimals) + unit;
+        }
+
+        function getLicenseClass(license) {
+            return license === 'Open'
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                : 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+        }
+
+        function getCreatorClass(creator) {
+            const classes = {
+                Anthropic:
+                    'bg-orange-500/10 text-orange-400 border-orange-500/30',
+                OpenAI:
+                    'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+                Google:
+                    'bg-blue-500/10 text-blue-400 border-blue-500/30',
+                'Z AI':
+                    'bg-violet-500/10 text-violet-400 border-violet-500/30',
+                DeepSeek:
+                    'bg-sky-500/10 text-sky-400 border-sky-500/30',
+                Alibaba:
+                    'bg-amber-500/10 text-amber-400 border-amber-500/30',
+                MiniMax:
+                    'bg-rose-500/10 text-rose-400 border-rose-500/30',
+                Kimi:
+                    'bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/30',
+                Meta:
+                    'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
+                Xiaomi:
+                    'bg-pink-500/10 text-pink-400 border-pink-500/30',
+                Nvidia:
+                    'bg-lime-500/10 text-lime-400 border-lime-500/30',
+                xAI:
+                    'bg-purple-500/10 text-purple-400 border-purple-500/30',
+                Tencent:
+                    'bg-teal-500/10 text-teal-400 border-teal-500/30',
+                InclusionAI:
+                    'bg-indigo-500/10 text-indigo-400 border-indigo-500/30',
+                'Thinking Machines':
+                    'bg-red-500/10 text-red-400 border-red-500/30',
+                'Motif Technologies':
+                    'bg-yellow-500/10 text-yellow-400 border-yellow-500/30',
+                'Nex AGI':
+                    'bg-violet-500/10 text-violet-300 border-violet-500/30',
+                'China Mobile':
+                    'bg-blue-500/10 text-blue-300 border-blue-500/30',
+                'Sapiens AI':
+                    'bg-rose-500/10 text-rose-300 border-rose-500/30',
+                KwaiKAT:
+                    'bg-orange-500/10 text-orange-300 border-orange-500/30',
+                LongCat:
+                    'bg-cyan-500/10 text-cyan-300 border-cyan-500/30'
+            };
+
+            return (
+                classes[creator] ||
+                'bg-slate-500/10 text-slate-400 border-slate-500/30'
+            );
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="px-6 py-12 text-center text-slate-400">
+                            <i class="fa-solid fa-search text-3xl mb-3 block"></i>
+                            No models match the current filters.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            data.forEach(model => {
+                const row = document.createElement('tr');
+                row.className =
+                    'hover:bg-slate-800/60 transition-colors';
+
+                const intelligencePercent = Math.min(
+                    (model.intelligenceNumeric / maxIntelligenceAll) * 100,
+                    100
+                );
+
+                const isTopThree = model.rank <= 3;
+
+                row.innerHTML = `
+                    <td class="text-center font-mono text-sm ${
+                        isTopThree
+                            ? 'font-bold text-amber-400'
+                            : 'text-slate-400'
+                    }">
+                        <div class="flex items-center justify-center gap-x-1">
+                            ${model.rank}
+                            ${
+                                isTopThree
+                                    ? '<i class="fa-solid fa-trophy text-amber-400 text-xs"></i>'
+                                    : ''
+                            }
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="model-name text-[14.5px]">
+                            ${model.model}
+                        </div>
+                    </td>
+
+                    <td>
+                        <span class="provider-pill inline-block border px-3 py-px text-xs ${getCreatorClass(
+                            model.creator
+                        )}">
+                            ${model.creator}
+                        </span>
+                    </td>
+
+                    <td class="text-center">
+                        <span class="license-pill inline-block border px-2 py-px text-[10px] ${getLicenseClass(
+                            model.license
+                        )}">
+                            ${model.license}
+                        </span>
+                    </td>
+
+                    <td class="text-center font-medium text-slate-300 text-xs">
+                        ${model.contextWindow}
+                    </td>
+
+                    <td class="text-center">
+                        <div class="flex flex-col items-center">
+                            <div class="intelligence-score tabular-nums text-lg font-bold">
+                                ${model.intelligenceDisplay}
+                            </div>
+
+                            <div class="w-14 mt-0.5 bg-slate-700 rounded-full h-1 overflow-hidden">
+                                <div
+                                    class="metric-bar"
+                                    style="width: ${intelligencePercent}%"
+                                ></div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="text-center price-cell">
+                        <span class="font-semibold ${
+                            model.inputPrice == null
+                                ? 'text-slate-500'
+                                : model.inputPrice < 1
+                                  ? 'text-emerald-400'
+                                  : 'text-white'
+                        }">
+                            ${formatPrice(model.inputPrice)}
+                        </span>
+                    </td>
+
+                    <td class="text-center price-cell">
+                        <span class="font-semibold ${
+                            model.outputPrice == null
+                                ? 'text-slate-500'
+                                : model.outputPrice < 2
+                                  ? 'text-emerald-400'
+                                  : model.outputPrice > 20
+                                    ? 'text-rose-400'
+                                    : 'text-white'
+                        }">
+                            ${formatPrice(model.outputPrice)}
+                        </span>
+                    </td>
+
+                    <td class="text-center perf-cell">
+                        <span class="font-semibold ${
+                            model.medianTokensPerSec == null
+                                ? 'text-slate-500'
+                                : model.medianTokensPerSec > 120
+                                  ? 'text-emerald-400'
+                                  : model.medianTokensPerSec > 70
+                                    ? 'text-white'
+                                    : 'text-slate-300'
+                        }">
+                            ${formatPerformance(model.medianTokensPerSec)}
+                        </span>
+                    </td>
+
+                    <td class="text-center perf-cell">
+                        <span class="font-semibold ${
+                            model.latencyFirstChunkSec == null
+                                ? 'text-slate-500'
+                                : model.latencyFirstChunkSec < 3
+                                  ? 'text-emerald-400'
+                                  : model.latencyFirstChunkSec < 15
+                                    ? 'text-white'
+                                    : 'text-rose-300'
+                        }">
+                            ${formatPerformance(
+                                model.latencyFirstChunkSec,
+                                's'
+                            )}
+                        </span>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function sortBy(field) {
+            if (currentSort.field === field) {
+                currentSort.direction =
+                    currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.field = field;
+
+                currentSort.direction = [
+                    'intelligenceNumeric',
+                    'rank',
+                    'medianTokensPerSec'
+                ].includes(field)
+                    ? 'desc'
+                    : 'asc';
+            }
+
+            filterAndRender();
+        }
+
+        function filterAndRender() {
+            const searchTerm = document
+                .getElementById('search-input')
+                .value.toLowerCase()
+                .trim();
+
+            const minimumIntelligenceValue =
+                document.getElementById('min-intel').value;
+
+            const minimumIntelligence =
+                minimumIntelligenceValue === 'avg-intelligence'
+                    ? avgIntelligenceAll
+                    : Number.parseInt(minimumIntelligenceValue, 10) || 0;
+
+            const maximumCostRaw = document
+                .getElementById('max-cost')
+                .value.trim();
+
+            const maximumCost = Number.parseFloat(maximumCostRaw);
+
+            const costFilterActive =
+                maximumCostRaw !== '' &&
+                !Number.isNaN(maximumCost) &&
+                maximumCost > 0;
+
+            const filterInputCost =
+                document.getElementById('cost-filter-input').checked;
+
+            const filterOutputCost =
+                document.getElementById('cost-filter-output').checked;
+
+            let filtered = models.filter(
+                model =>
+                    model.intelligenceNumeric >= minimumIntelligence
+            );
+
+            if (costFilterActive) {
+                filtered = filtered.filter(model => {
+                    if (!filterInputCost && !filterOutputCost) {
+                        return true;
+                    }
+
+                    if (
+                        filterInputCost &&
+                        (
+                            model.inputPrice === null ||
+                            model.inputPrice === undefined ||
+                            model.inputPrice > maximumCost
+                        )
+                    ) {
+                        return false;
+                    }
+
+                    if (
+                        filterOutputCost &&
+                        (
+                            model.outputPrice === null ||
+                            model.outputPrice === undefined ||
+                            model.outputPrice > maximumCost
+                        )
+                    ) {
+                        return false;
+                    }
+
+                    return true;
+                });
+            }
+
+            if (searchTerm) {
+                filtered = filtered.filter(
+                    model =>
+                        model.model.toLowerCase().includes(searchTerm) ||
+                        model.creator.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            const sorted = [...filtered].sort((a, b) => {
+                let valueA = a[currentSort.field];
+                let valueB = b[currentSort.field];
+
+                const nullableFields = [
+                    'blended',
+                    'inputPrice',
+                    'outputPrice',
+                    'cacheRead',
+                    'cacheWrite',
+                    'medianTokensPerSec',
+                    'latencyFirstChunkSec'
+                ];
+
+                if (nullableFields.includes(currentSort.field)) {
+                    if (valueA == null) {
+                        valueA =
+                            currentSort.direction === 'asc'
+                                ? Infinity
+                                : -Infinity;
+                    }
+
+                    if (valueB == null) {
+                        valueB =
+                            currentSort.direction === 'asc'
+                                ? Infinity
+                                : -Infinity;
+                    }
+                }
+
+                if (
+                    typeof valueA === 'string' ||
+                    typeof valueB === 'string'
+                ) {
+                    const comparison = String(valueA).localeCompare(
+                        String(valueB),
+                        undefined,
+                        {
+                            numeric: true,
+                            sensitivity: 'base'
+                        }
+                    );
+
+                    return currentSort.direction === 'asc'
+                        ? comparison
+                        : -comparison;
+                }
+
+                const comparison = valueA - valueB;
+
+                if (comparison !== 0) {
+                    return currentSort.direction === 'asc'
+                        ? comparison
+                        : -comparison;
+                }
+
+                // Keep equal values stable in permanent leaderboard order.
+                return a.rank - b.rank;
+            });
+
+            renderTable(sorted);
+            updateStats(sorted);
+            updateSortIndicators();
+        }
+
+        function getHeaderField(header) {
+            const text = header.textContent.toLowerCase().trim();
+
+            if (text.startsWith('#')) return 'rank';
+            if (text.includes('model')) return 'model';
+            if (text.includes('creator')) return 'creator';
+            if (text.includes('license')) return 'license';
+            if (text.includes('context')) return 'contextWindow';
+            if (text.includes('intelligence')) return 'intelligenceNumeric';
+            if (text.includes('input')) return 'inputPrice';
+            if (text.includes('output')) return 'outputPrice';
+            if (text.includes('speed')) return 'medianTokensPerSec';
+            if (text.includes('latency')) return 'latencyFirstChunkSec';
+
+            return null;
+        }
+
+        function updateSortIndicators() {
+            document.querySelectorAll('thead th').forEach(header => {
+                header.classList.remove('sorted');
+
+                const icon = header.querySelector(
+                    '.fa-sort, .fa-sort-up, .fa-sort-down'
+                );
+
+                if (icon) {
+                    icon.className =
+                        'fa-solid fa-sort sort-arrow fa-xs ml-1';
+                }
+
+                if (getHeaderField(header) === currentSort.field) {
+                    header.classList.add('sorted');
+
+                    if (icon) {
+                        icon.className =
+                            currentSort.direction === 'asc'
+                                ? 'fa-solid fa-sort-up sort-arrow fa-sm ml-1 text-indigo-400'
+                                : 'fa-solid fa-sort-down sort-arrow fa-sm ml-1 text-indigo-400';
+                    }
+                }
+            });
+        }
+
+        function resetSort() {
+            currentSort = {
+                field: 'intelligenceNumeric',
+                direction: 'desc'
+            };
+
+            document.getElementById('search-input').value = '';
+            document.getElementById('min-intel').value = '0';
+            document.getElementById('max-cost').value = '';
+            document.getElementById('cost-filter-input').checked = true;
+            document.getElementById('cost-filter-output').checked = false;
+
+            filterAndRender();
+        }
+
+        function updateStats(currentModels = models) {
+            document.getElementById('model-count').textContent =
+                currentModels.length;
+
+            if (currentModels.length === 0) {
+                document.getElementById('avg-intelligence').textContent =
+                    '—';
+                return;
+            }
+
+            const average =
+                currentModels.reduce(
+                    (sum, model) => sum + model.intelligenceNumeric,
+                    0
+                ) / currentModels.length;
+
+            document.getElementById('avg-intelligence').textContent =
+                average.toFixed(1);
+        }
+
+        function initializeTable() {
+            filterAndRender();
+
+            document.addEventListener('keydown', event => {
+                if (
+                    event.key === '/' &&
+                    document.activeElement.tagName === 'BODY'
+                ) {
+                    event.preventDefault();
+                    document.getElementById('search-input').focus();
+                }
+            });
+
+            console.log(
+                `%c[AA Leaderboard] Loaded ${models.length} models with intelligence, pricing, speed and latency data.`,
+                'color:#64748b'
+            );
+        }
+
+        function boot() {
+            initializeTailwind();
+            initializeTable();
+        }
+
+        window.onload = boot;
+
+        window.AALeaderboard = {
+            models,
+            sortBy,
+            filterAndRender,
+            resetSort
+        };
+    </script>
+</body>
+</html>
