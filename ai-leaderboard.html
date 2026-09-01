@@ -463,6 +463,34 @@
         // Intelligence, pricing, speed and latency data.
 const rawData = [
   {
+    "model": "Claude Fable 5.1 (max with fallback)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 66,
+    "blended": 3.69,
+    "inputPrice": 10.00,
+    "outputPrice": 50.00,
+    "cacheRead": 0.25,
+    "cacheWrite": 12.50,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
+  },
+  {
+    "model": "Claude Fable 5.1 (xhigh with fallback)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 65,
+    "blended": 2.65,
+    "inputPrice": 10.00,
+    "outputPrice": 50.00,
+    "cacheRead": 0.25,
+    "cacheWrite": 12.50,
+    "medianTokensPerSec": 48,
+    "latencyFirstChunkSec": 97.86
+  },
+  {
     "model": "Claude Opus 5 (max)",
     "contextWindow": "1M",
     "creator": "Anthropic",
@@ -474,7 +502,7 @@ const rawData = [
     "cacheRead": 0.50,
     "cacheWrite": 6.25,
     "medianTokensPerSec": 54,
-    "latencyFirstChunkSec": 32.79
+    "latencyFirstChunkSec": 60.42
   },
   {
     "model": "Claude Opus 5 (xhigh)",
@@ -487,8 +515,22 @@ const rawData = [
     "outputPrice": 25.00,
     "cacheRead": 0.50,
     "cacheWrite": 6.25,
-    "medianTokensPerSec": 54,
-    "latencyFirstChunkSec": 24.30
+    "medianTokensPerSec": 52,
+    "latencyFirstChunkSec": 35.99
+  },
+  {
+    "model": "Claude Fable 5.1 (high with fallback)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 62,
+    "blended": 1.43,
+    "inputPrice": 10.00,
+    "outputPrice": 50.00,
+    "cacheRead": 0.25,
+    "cacheWrite": 12.50,
+    "medianTokensPerSec": 48,
+    "latencyFirstChunkSec": 35.39
   },
   {
     "model": "Claude Fable 5 (with fallback)",
@@ -501,8 +543,8 @@ const rawData = [
     "outputPrice": 50.00,
     "cacheRead": 1.00,
     "cacheWrite": 12.50,
-    "medianTokensPerSec": 69,
-    "latencyFirstChunkSec": 86.99
+    "medianTokensPerSec": 67,
+    "latencyFirstChunkSec": 121.50
   },
   {
     "model": "Claude Opus 5 (high)",
@@ -515,8 +557,8 @@ const rawData = [
     "outputPrice": 25.00,
     "cacheRead": 0.50,
     "cacheWrite": 6.25,
-    "medianTokensPerSec": 54,
-    "latencyFirstChunkSec": 16.37
+    "medianTokensPerSec": 49,
+    "latencyFirstChunkSec": 10.51
   },
   {
     "model": "GPT-5.6 Sol (max)",
@@ -524,13 +566,13 @@ const rawData = [
     "creator": "OpenAI",
     "license": "Proprietary",
     "artificialAnalysisIntelligenceIndex": 61,
-    "blended": 1.01,
+    "blended": 0.95,
     "inputPrice": 4.00,
     "outputPrice": 20.00,
     "cacheRead": 0.40,
-    "cacheWrite": 6.25,
-    "medianTokensPerSec": 74,
-    "latencyFirstChunkSec": 112.27
+    "cacheWrite": 5.00,
+    "medianTokensPerSec": 77,
+    "latencyFirstChunkSec": 100.85
   },
   {
     "model": "Grok 4.6 (high)",
@@ -543,8 +585,22 @@ const rawData = [
     "outputPrice": 6.00,
     "cacheRead": 0.50,
     "cacheWrite": null,
-    "medianTokensPerSec": 58,
-    "latencyFirstChunkSec": 42.98
+    "medianTokensPerSec": 54,
+    "latencyFirstChunkSec": 44.74
+  },
+  {
+    "model": "Claude Fable 5.1 (medium with fallback)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 60,
+    "blended": 1.00,
+    "inputPrice": 10.00,
+    "outputPrice": 50.00,
+    "cacheRead": 0.25,
+    "cacheWrite": 12.50,
+    "medianTokensPerSec": 47,
+    "latencyFirstChunkSec": 6.00
   },
   {
     "model": "Grok 4.6 (xhigh)",
@@ -557,8 +613,8 @@ const rawData = [
     "outputPrice": 6.00,
     "cacheRead": 0.50,
     "cacheWrite": null,
-    "medianTokensPerSec": 58,
-    "latencyFirstChunkSec": 36.22
+    "medianTokensPerSec": 57,
+    "latencyFirstChunkSec": 40.75
   },
   {
     "model": "Kimi K3 (max)",
@@ -571,14 +627,14 @@ const rawData = [
     "outputPrice": 15.00,
     "cacheRead": 0.30,
     "cacheWrite": null,
-    "medianTokensPerSec": 37,
-    "latencyFirstChunkSec": 7.20
+    "medianTokensPerSec": 38,
+    "latencyFirstChunkSec": 3.44
   },
   {
     "model": "GLM-5.3 (max)",
     "contextWindow": "1M",
     "creator": "Z AI",
-    "license": "Proprietary",
+    "license": "Open",
     "artificialAnalysisIntelligenceIndex": 60,
     "blended": 0.68,
     "inputPrice": 1.40,
@@ -586,7 +642,7 @@ const rawData = [
     "cacheRead": 0.26,
     "cacheWrite": null,
     "medianTokensPerSec": 72,
-    "latencyFirstChunkSec": 1.60
+    "latencyFirstChunkSec": 1.79
   },
   {
     "model": "GPT-5.6 Sol (xhigh)",
@@ -594,13 +650,13 @@ const rawData = [
     "creator": "OpenAI",
     "license": "Proprietary",
     "artificialAnalysisIntelligenceIndex": 59,
-    "blended": 0.67,
+    "blended": 0.63,
     "inputPrice": 4.00,
     "outputPrice": 20.00,
     "cacheRead": 0.40,
-    "cacheWrite": 6.25,
-    "medianTokensPerSec": 73,
-    "latencyFirstChunkSec": 46.43
+    "cacheWrite": 5.00,
+    "medianTokensPerSec": 80,
+    "latencyFirstChunkSec": 31.71
   },
   {
     "model": "Grok 4.6 (medium)",
@@ -614,7 +670,7 @@ const rawData = [
     "cacheRead": 0.50,
     "cacheWrite": null,
     "medianTokensPerSec": 57,
-    "latencyFirstChunkSec": 33.34
+    "latencyFirstChunkSec": 19.45
   },
   {
     "model": "Claude Opus 5 (medium)",
@@ -627,8 +683,22 @@ const rawData = [
     "outputPrice": 25.00,
     "cacheRead": 0.50,
     "cacheWrite": 6.25,
-    "medianTokensPerSec": 54,
-    "latencyFirstChunkSec": 4.60
+    "medianTokensPerSec": 48,
+    "latencyFirstChunkSec": 3.91
+  },
+  {
+    "model": "Claude Fable 5.1 (low with fallback)",
+    "contextWindow": "1M",
+    "creator": "Anthropic",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 58,
+    "blended": 0.77,
+    "inputPrice": 10.00,
+    "outputPrice": 50.00,
+    "cacheRead": 0.25,
+    "cacheWrite": 12.50,
+    "medianTokensPerSec": 53,
+    "latencyFirstChunkSec": 2.57
   },
   {
     "model": "Qwen3.8 Max",
@@ -641,7 +711,7 @@ const rawData = [
     "outputPrice": 6.00,
     "cacheRead": 0.25,
     "cacheWrite": null,
-    "medianTokensPerSec": 21,
+    "medianTokensPerSec": 41,
     "latencyFirstChunkSec": 2.50
   },
   {
@@ -655,8 +725,8 @@ const rawData = [
     "outputPrice": 6.00,
     "cacheRead": 0.25,
     "cacheWrite": null,
-    "medianTokensPerSec": 24,
-    "latencyFirstChunkSec": 2.59
+    "medianTokensPerSec": 42,
+    "latencyFirstChunkSec": 2.69
   },
   {
     "model": "GLM-5.3-Flash",
@@ -669,8 +739,8 @@ const rawData = [
     "outputPrice": 0.50,
     "cacheRead": 0.03,
     "cacheWrite": null,
-    "medianTokensPerSec": 50,
-    "latencyFirstChunkSec": 1.46
+    "medianTokensPerSec": 41,
+    "latencyFirstChunkSec": 1.65
   },
   {
     "model": "GPT-5.6 Sol (high)",
@@ -678,13 +748,13 @@ const rawData = [
     "creator": "OpenAI",
     "license": "Proprietary",
     "artificialAnalysisIntelligenceIndex": 57,
-    "blended": 0.46,
+    "blended": 0.43,
     "inputPrice": 4.00,
     "outputPrice": 20.00,
     "cacheRead": 0.40,
-    "cacheWrite": 6.25,
-    "medianTokensPerSec": 75,
-    "latencyFirstChunkSec": 9.42
+    "cacheWrite": 5.00,
+    "medianTokensPerSec": 78,
+    "latencyFirstChunkSec": 9.34
   },
   {
     "model": "Muse Spark 1.2 (xhigh)",
@@ -697,8 +767,8 @@ const rawData = [
     "outputPrice": 4.25,
     "cacheRead": 0.15,
     "cacheWrite": null,
-    "medianTokensPerSec": null,
-    "latencyFirstChunkSec": null
+    "medianTokensPerSec": 92,
+    "latencyFirstChunkSec": 29.01
   },
   {
     "model": "GPT-5.6 Terra (max)",
@@ -711,8 +781,8 @@ const rawData = [
     "outputPrice": 12.00,
     "cacheRead": 0.20,
     "cacheWrite": 2.50,
-    "medianTokensPerSec": 108,
-    "latencyFirstChunkSec": 141.99
+    "medianTokensPerSec": 114,
+    "latencyFirstChunkSec": 149.16
   },
   {
     "model": "Gemini 3.7 Flash (high)",
@@ -725,8 +795,8 @@ const rawData = [
     "outputPrice": 3.75,
     "cacheRead": 0.07,
     "cacheWrite": 0.75,
-    "medianTokensPerSec": 330,
-    "latencyFirstChunkSec": 13.20
+    "medianTokensPerSec": 289,
+    "latencyFirstChunkSec": 10.31
   },
   {
     "model": "Qwen3.8-Flash-Next",
@@ -734,13 +804,13 @@ const rawData = [
     "creator": "Alibaba",
     "license": "Open",
     "artificialAnalysisIntelligenceIndex": 56,
-    "blended": null,
-    "inputPrice": null,
-    "outputPrice": null,
-    "cacheRead": null,
+    "blended": 0.10,
+    "inputPrice": 0.15,
+    "outputPrice": 0.47,
+    "cacheRead": 0.02,
     "cacheWrite": null,
-    "medianTokensPerSec": null,
-    "latencyFirstChunkSec": null
+    "medianTokensPerSec": 89,
+    "latencyFirstChunkSec": 2.60
   },
   {
     "model": "Grok 4.5 (high)",
@@ -753,8 +823,8 @@ const rawData = [
     "outputPrice": 6.00,
     "cacheRead": 0.30,
     "cacheWrite": null,
-    "medianTokensPerSec": 55,
-    "latencyFirstChunkSec": 11.25
+    "medianTokensPerSec": 48,
+    "latencyFirstChunkSec": 12.68
   },
   {
     "model": "GPT-5.6 Sol (medium)",
@@ -762,13 +832,13 @@ const rawData = [
     "creator": "OpenAI",
     "license": "Proprietary",
     "artificialAnalysisIntelligenceIndex": 56,
-    "blended": 0.31,
+    "blended": 0.29,
     "inputPrice": 4.00,
     "outputPrice": 20.00,
     "cacheRead": 0.40,
-    "cacheWrite": 6.25,
+    "cacheWrite": 5.00,
     "medianTokensPerSec": 73,
-    "latencyFirstChunkSec": 4.36
+    "latencyFirstChunkSec": 3.96
   },
   {
     "model": "Claude Sonnet 5 (max)",
@@ -781,8 +851,8 @@ const rawData = [
     "outputPrice": 10.00,
     "cacheRead": 0.20,
     "cacheWrite": 2.50,
-    "medianTokensPerSec": 95,
-    "latencyFirstChunkSec": 195.84
+    "medianTokensPerSec": 72,
+    "latencyFirstChunkSec": 176.94
   },
   {
     "model": "Gemini 3.7 Flash (medium)",
@@ -795,8 +865,8 @@ const rawData = [
     "outputPrice": 3.75,
     "cacheRead": 0.07,
     "cacheWrite": 0.75,
-    "medianTokensPerSec": 333,
-    "latencyFirstChunkSec": 6.87
+    "medianTokensPerSec": 287,
+    "latencyFirstChunkSec": 5.33
   },
   {
     "model": "DeepSeek V4 Pro 0813 (max)",
@@ -809,8 +879,8 @@ const rawData = [
     "outputPrice": 3.96,
     "cacheRead": 0.04,
     "cacheWrite": null,
-    "medianTokensPerSec": 68,
-    "latencyFirstChunkSec": 1.48
+    "medianTokensPerSec": 54,
+    "latencyFirstChunkSec": 1.65
   },
   {
     "model": "GPT-5.6 Terra (xhigh)",
@@ -823,8 +893,8 @@ const rawData = [
     "outputPrice": 12.00,
     "cacheRead": 0.20,
     "cacheWrite": 2.50,
-    "medianTokensPerSec": 105,
-    "latencyFirstChunkSec": 14.73
+    "medianTokensPerSec": 97,
+    "latencyFirstChunkSec": 17.87
   },
   {
     "model": "GLM-5.2 (max)",
@@ -837,8 +907,8 @@ const rawData = [
     "outputPrice": 4.40,
     "cacheRead": 0.26,
     "cacheWrite": null,
-    "medianTokensPerSec": 71,
-    "latencyFirstChunkSec": 1.55
+    "medianTokensPerSec": 69,
+    "latencyFirstChunkSec": 1.62
   },
   {
     "model": "Claude Opus 5 (low)",
@@ -851,8 +921,8 @@ const rawData = [
     "outputPrice": 25.00,
     "cacheRead": 0.50,
     "cacheWrite": 6.25,
-    "medianTokensPerSec": 55,
-    "latencyFirstChunkSec": 3.13
+    "medianTokensPerSec": 49,
+    "latencyFirstChunkSec": 2.63
   },
   {
     "model": "GPT-5.6 Luna (max)",
@@ -865,8 +935,8 @@ const rawData = [
     "outputPrice": 1.20,
     "cacheRead": 0.02,
     "cacheWrite": 0.25,
-    "medianTokensPerSec": 131,
-    "latencyFirstChunkSec": 110.84
+    "medianTokensPerSec": 129,
+    "latencyFirstChunkSec": 143.88
   },
   {
     "model": "Qwen3.8 27B (xhigh)",
@@ -879,8 +949,8 @@ const rawData = [
     "outputPrice": 3.00,
     "cacheRead": 0.05,
     "cacheWrite": null,
-    "medianTokensPerSec": 47,
-    "latencyFirstChunkSec": 3.59
+    "medianTokensPerSec": 44,
+    "latencyFirstChunkSec": 3.92
   },
   {
     "model": "DeepSeek V4 Flash 0731 (max)",
@@ -893,8 +963,8 @@ const rawData = [
     "outputPrice": 1.32,
     "cacheRead": 0.01,
     "cacheWrite": null,
-    "medianTokensPerSec": 122,
-    "latencyFirstChunkSec": 1.12
+    "medianTokensPerSec": 108,
+    "latencyFirstChunkSec": 1.50
   },
   {
     "model": "Grok 4.6 (low)",
@@ -908,7 +978,7 @@ const rawData = [
     "cacheRead": 0.50,
     "cacheWrite": null,
     "medianTokensPerSec": 55,
-    "latencyFirstChunkSec": 6.82
+    "latencyFirstChunkSec": 6.84
   },
   {
     "model": "Gemini 3.6 Flash",
@@ -921,8 +991,8 @@ const rawData = [
     "outputPrice": 3.75,
     "cacheRead": 0.15,
     "cacheWrite": null,
-    "medianTokensPerSec": 190,
-    "latencyFirstChunkSec": 17.72
+    "medianTokensPerSec": 167,
+    "latencyFirstChunkSec": 16.51
   },
   {
     "model": "DeepSeek V4 Flash Vision (max)",
@@ -935,8 +1005,8 @@ const rawData = [
     "outputPrice": 1.32,
     "cacheRead": 0.01,
     "cacheWrite": null,
-    "medianTokensPerSec": 119,
-    "latencyFirstChunkSec": 1.14
+    "medianTokensPerSec": 109,
+    "latencyFirstChunkSec": 1.13
   },
   {
     "model": "Gemini 3.7 Flash (low)",
@@ -949,8 +1019,8 @@ const rawData = [
     "outputPrice": 3.75,
     "cacheRead": 0.07,
     "cacheWrite": 0.75,
-    "medianTokensPerSec": 320,
-    "latencyFirstChunkSec": 1.03
+    "medianTokensPerSec": 308,
+    "latencyFirstChunkSec": 0.72
   },
   {
     "model": "GPT-5.6 Sol (low)",
@@ -958,13 +1028,13 @@ const rawData = [
     "creator": "OpenAI",
     "license": "Proprietary",
     "artificialAnalysisIntelligenceIndex": 51,
-    "blended": 0.19,
+    "blended": 0.18,
     "inputPrice": 4.00,
     "outputPrice": 20.00,
     "cacheRead": 0.40,
-    "cacheWrite": 6.25,
-    "medianTokensPerSec": 75,
-    "latencyFirstChunkSec": 2.99
+    "cacheWrite": 5.00,
+    "medianTokensPerSec": 73,
+    "latencyFirstChunkSec": 2.26
   },
   {
     "model": "GPT-5.6 Terra (high)",
@@ -977,8 +1047,8 @@ const rawData = [
     "outputPrice": 12.00,
     "cacheRead": 0.20,
     "cacheWrite": 2.50,
-    "medianTokensPerSec": 102,
-    "latencyFirstChunkSec": 3.08
+    "medianTokensPerSec": 98,
+    "latencyFirstChunkSec": 2.65
   },
   {
     "model": "GPT-5.6 Luna (xhigh)",
@@ -991,8 +1061,8 @@ const rawData = [
     "outputPrice": 1.20,
     "cacheRead": 0.02,
     "cacheWrite": 0.25,
-    "medianTokensPerSec": 119,
-    "latencyFirstChunkSec": 47.05
+    "medianTokensPerSec": 125,
+    "latencyFirstChunkSec": 56.65
   },
   {
     "model": "Agnes 2.5 Pro Beta",
@@ -1000,13 +1070,13 @@ const rawData = [
     "creator": "Sapiens AI",
     "license": "Proprietary",
     "artificialAnalysisIntelligenceIndex": 49,
-    "blended": null,
+    "blended": 0.03,
     "inputPrice": 0.10,
     "outputPrice": 0.30,
     "cacheRead": 0.01,
     "cacheWrite": null,
-    "medianTokensPerSec": 160,
-    "latencyFirstChunkSec": 2.58
+    "medianTokensPerSec": 150,
+    "latencyFirstChunkSec": 2.05
   },
   {
     "model": "Kimi K3 (low)",
@@ -1019,8 +1089,8 @@ const rawData = [
     "outputPrice": 15.00,
     "cacheRead": 0.30,
     "cacheWrite": null,
-    "medianTokensPerSec": 36,
-    "latencyFirstChunkSec": 5.08
+    "medianTokensPerSec": 40,
+    "latencyFirstChunkSec": 2.74
   },
   {
     "model": "Gemini 3.1 Pro Preview",
@@ -1033,8 +1103,8 @@ const rawData = [
     "outputPrice": 12.00,
     "cacheRead": 0.20,
     "cacheWrite": null,
-    "medianTokensPerSec": 118,
-    "latencyFirstChunkSec": 29.29
+    "medianTokensPerSec": 103,
+    "latencyFirstChunkSec": 26.71
   },
   {
     "model": "Motif 3",
@@ -1061,8 +1131,8 @@ const rawData = [
     "outputPrice": 1.20,
     "cacheRead": 0.02,
     "cacheWrite": 0.25,
-    "medianTokensPerSec": 122,
-    "latencyFirstChunkSec": 11.33
+    "medianTokensPerSec": 120,
+    "latencyFirstChunkSec": 13.14
   },
   {
     "model": "GPT-5.6 Terra (medium)",
@@ -1075,8 +1145,8 @@ const rawData = [
     "outputPrice": 12.00,
     "cacheRead": 0.20,
     "cacheWrite": 2.50,
-    "medianTokensPerSec": 97,
-    "latencyFirstChunkSec": 1.69
+    "medianTokensPerSec": 93,
+    "latencyFirstChunkSec": 1.62
   },
   {
     "model": "Gemini 3.5 Flash (medium)",
@@ -1089,8 +1159,8 @@ const rawData = [
     "outputPrice": 9.00,
     "cacheRead": 0.15,
     "cacheWrite": null,
-    "medianTokensPerSec": 196,
-    "latencyFirstChunkSec": 14.46
+    "medianTokensPerSec": 198,
+    "latencyFirstChunkSec": 13.99
   },
   {
     "model": "GPT-5.3 Codex (xhigh)",
@@ -1103,8 +1173,8 @@ const rawData = [
     "outputPrice": 14.00,
     "cacheRead": 0.17,
     "cacheWrite": null,
-    "medianTokensPerSec": 130,
-    "latencyFirstChunkSec": 66.59
+    "medianTokensPerSec": 128,
+    "latencyFirstChunkSec": 48.25
   },
   {
     "model": "MiniMax-M3",
@@ -1117,8 +1187,8 @@ const rawData = [
     "outputPrice": 1.20,
     "cacheRead": 0.06,
     "cacheWrite": 0.38,
-    "medianTokensPerSec": 114,
-    "latencyFirstChunkSec": 1.19
+    "medianTokensPerSec": 121,
+    "latencyFirstChunkSec": 1.30
   },
   {
     "model": "Motif 3 (Beta)",
@@ -1145,8 +1215,8 @@ const rawData = [
     "outputPrice": 0.87,
     "cacheRead": 0.00,
     "cacheWrite": null,
-    "medianTokensPerSec": 66,
-    "latencyFirstChunkSec": 1.72
+    "medianTokensPerSec": 50,
+    "latencyFirstChunkSec": 1.62
   },
   {
     "model": "Qwen3.8 27B (medium)",
@@ -1159,8 +1229,22 @@ const rawData = [
     "outputPrice": 3.00,
     "cacheRead": 0.05,
     "cacheWrite": null,
-    "medianTokensPerSec": 53,
-    "latencyFirstChunkSec": 3.68
+    "medianTokensPerSec": 49,
+    "latencyFirstChunkSec": 3.94
+  },
+  {
+    "model": "Apodex 1.1",
+    "contextWindow": "256k",
+    "creator": "Apodex",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 44,
+    "blended": 0.23,
+    "inputPrice": 0.30,
+    "outputPrice": 3.00,
+    "cacheRead": 0.03,
+    "cacheWrite": null,
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
   },
   {
     "model": "DeepSeek V4 Pro (high)",
@@ -1173,8 +1257,8 @@ const rawData = [
     "outputPrice": 0.87,
     "cacheRead": 0.00,
     "cacheWrite": null,
-    "medianTokensPerSec": 68,
-    "latencyFirstChunkSec": 1.63
+    "medianTokensPerSec": 65,
+    "latencyFirstChunkSec": 1.66
   },
   {
     "model": "Kimi K2.7 Code",
@@ -1187,8 +1271,22 @@ const rawData = [
     "outputPrice": 4.00,
     "cacheRead": 0.19,
     "cacheWrite": null,
-    "medianTokensPerSec": 45,
+    "medianTokensPerSec": 47,
     "latencyFirstChunkSec": 2.87
+  },
+  {
+    "model": "Quasar 438B",
+    "contextWindow": "1M",
+    "creator": "Multiverse Computing",
+    "license": "Proprietary",
+    "artificialAnalysisIntelligenceIndex": 43,
+    "blended": 0.60,
+    "inputPrice": 0.60,
+    "outputPrice": 1.80,
+    "cacheRead": null,
+    "cacheWrite": null,
+    "medianTokensPerSec": 180,
+    "latencyFirstChunkSec": 1.09
   },
   {
     "model": "MiMo-V2.5-Pro",
@@ -1201,8 +1299,8 @@ const rawData = [
     "outputPrice": 0.87,
     "cacheRead": 0.00,
     "cacheWrite": null,
-    "medianTokensPerSec": 42,
-    "latencyFirstChunkSec": 5.34
+    "medianTokensPerSec": 37,
+    "latencyFirstChunkSec": 4.02
   },
   {
     "model": "Qwen3.8 27B (low)",
@@ -1215,8 +1313,8 @@ const rawData = [
     "outputPrice": 3.00,
     "cacheRead": 0.05,
     "cacheWrite": null,
-    "medianTokensPerSec": 57,
-    "latencyFirstChunkSec": 3.57
+    "medianTokensPerSec": 50,
+    "latencyFirstChunkSec": 3.96
   },
   {
     "model": "Claude Sonnet 5 (Non-reasoning)",
@@ -1229,8 +1327,8 @@ const rawData = [
     "outputPrice": 10.00,
     "cacheRead": 0.20,
     "cacheWrite": 2.50,
-    "medianTokensPerSec": 64,
-    "latencyFirstChunkSec": 1.70
+    "medianTokensPerSec": 58,
+    "latencyFirstChunkSec": 1.21
   },
   {
     "model": "Inkling",
@@ -1243,8 +1341,8 @@ const rawData = [
     "outputPrice": 4.05,
     "cacheRead": 0.17,
     "cacheWrite": null,
-    "medianTokensPerSec": 51,
-    "latencyFirstChunkSec": 2.77
+    "medianTokensPerSec": 73,
+    "latencyFirstChunkSec": 2.36
   },
   {
     "model": "Hy3",
@@ -1257,8 +1355,8 @@ const rawData = [
     "outputPrice": 0.55,
     "cacheRead": 0.03,
     "cacheWrite": null,
-    "medianTokensPerSec": 66,
-    "latencyFirstChunkSec": 2.82
+    "medianTokensPerSec": 97,
+    "latencyFirstChunkSec": 2.72
   },
   {
     "model": "GPT-5.6 Sol (Non-reasoning)",
@@ -1266,13 +1364,13 @@ const rawData = [
     "creator": "OpenAI",
     "license": "Proprietary",
     "artificialAnalysisIntelligenceIndex": 42,
-    "blended": 0.19,
+    "blended": 0.18,
     "inputPrice": 4.00,
     "outputPrice": 20.00,
     "cacheRead": 0.40,
-    "cacheWrite": 6.25,
-    "medianTokensPerSec": 72,
-    "latencyFirstChunkSec": 1.29
+    "cacheWrite": 5.00,
+    "medianTokensPerSec": 75,
+    "latencyFirstChunkSec": 1.05
   },
   {
     "model": "Nex-N2-Pro",
@@ -1285,8 +1383,8 @@ const rawData = [
     "outputPrice": 2.50,
     "cacheRead": 0.25,
     "cacheWrite": null,
-    "medianTokensPerSec": 130,
-    "latencyFirstChunkSec": 1.62
+    "medianTokensPerSec": 137,
+    "latencyFirstChunkSec": 1.71
   },
   {
     "model": "Solar Pro 4",
@@ -1299,7 +1397,7 @@ const rawData = [
     "outputPrice": 1.20,
     "cacheRead": 0.06,
     "cacheWrite": null,
-    "medianTokensPerSec": 59,
+    "medianTokensPerSec": 87,
     "latencyFirstChunkSec": 2.16
   },
   {
@@ -1313,8 +1411,8 @@ const rawData = [
     "outputPrice": 12.00,
     "cacheRead": 0.20,
     "cacheWrite": 2.50,
-    "medianTokensPerSec": 102,
-    "latencyFirstChunkSec": 1.51
+    "medianTokensPerSec": 98,
+    "latencyFirstChunkSec": 1.31
   },
   {
     "model": "Inkling Small",
@@ -1327,8 +1425,8 @@ const rawData = [
     "outputPrice": 1.20,
     "cacheRead": 0.06,
     "cacheWrite": null,
-    "medianTokensPerSec": 77,
-    "latencyFirstChunkSec": 2.17
+    "medianTokensPerSec": 49,
+    "latencyFirstChunkSec": 2.45
   },
   {
     "model": "JT-4.1 Flash 236B A21B",
@@ -1353,10 +1451,10 @@ const rawData = [
     "blended": null,
     "inputPrice": 0.45,
     "outputPrice": 0.90,
-    "cacheRead": 0.00,
+    "cacheRead": 0.01,
     "cacheWrite": null,
-    "medianTokensPerSec": 130,
-    "latencyFirstChunkSec": 2.00
+    "medianTokensPerSec": 180,
+    "latencyFirstChunkSec": 2.75
   },
   {
     "model": "Qwen3.7 Plus",
@@ -1369,8 +1467,8 @@ const rawData = [
     "outputPrice": 1.60,
     "cacheRead": 0.04,
     "cacheWrite": 0.50,
-    "medianTokensPerSec": 56,
-    "latencyFirstChunkSec": 2.11
+    "medianTokensPerSec": 57,
+    "latencyFirstChunkSec": 2.22
   },
   {
     "model": "GPT-5.6 Luna (medium)",
@@ -1383,8 +1481,8 @@ const rawData = [
     "outputPrice": 1.20,
     "cacheRead": 0.02,
     "cacheWrite": 0.25,
-    "medianTokensPerSec": 120,
-    "latencyFirstChunkSec": 2.74
+    "medianTokensPerSec": 116,
+    "latencyFirstChunkSec": 2.40
   },
   {
     "model": "Nemotron 3 Ultra",
@@ -1392,13 +1490,13 @@ const rawData = [
     "creator": "NVIDIA",
     "license": "Open",
     "artificialAnalysisIntelligenceIndex": 38,
-    "blended": 0.38,
-    "inputPrice": 0.60,
-    "outputPrice": 2.75,
-    "cacheRead": 0.20,
+    "blended": 0.39,
+    "inputPrice": 0.68,
+    "outputPrice": 2.67,
+    "cacheRead": 0.25,
     "cacheWrite": null,
-    "medianTokensPerSec": 164,
-    "latencyFirstChunkSec": 2.09
+    "medianTokensPerSec": 103,
+    "latencyFirstChunkSec": 3.23
   },
   {
     "model": "MiMo-V2.5",
@@ -1411,8 +1509,8 @@ const rawData = [
     "outputPrice": 0.28,
     "cacheRead": 0.00,
     "cacheWrite": null,
-    "medianTokensPerSec": 69,
-    "latencyFirstChunkSec": 3.07
+    "medianTokensPerSec": 59,
+    "latencyFirstChunkSec": 5.23
   },
   {
     "model": "Ling 3.0 Flash",
@@ -1425,8 +1523,8 @@ const rawData = [
     "outputPrice": 0.22,
     "cacheRead": 0.01,
     "cacheWrite": null,
-    "medianTokensPerSec": 385,
-    "latencyFirstChunkSec": 2.65
+    "medianTokensPerSec": 374,
+    "latencyFirstChunkSec": 2.92
   },
   {
     "model": "Qwen3.6 27B",
@@ -1439,8 +1537,8 @@ const rawData = [
     "outputPrice": 3.60,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 50,
-    "latencyFirstChunkSec": 3.74
+    "medianTokensPerSec": 55,
+    "latencyFirstChunkSec": 3.77
   },
   {
     "model": "Gemini 3.5 Flash-Lite",
@@ -1453,8 +1551,8 @@ const rawData = [
     "outputPrice": 2.50,
     "cacheRead": 0.03,
     "cacheWrite": null,
-    "medianTokensPerSec": 365,
-    "latencyFirstChunkSec": 9.00
+    "medianTokensPerSec": 347,
+    "latencyFirstChunkSec": 7.92
   },
   {
     "model": "Solar Open2 250B",
@@ -1495,8 +1593,8 @@ const rawData = [
     "outputPrice": 2.50,
     "cacheRead": 0.20,
     "cacheWrite": 1.25,
-    "medianTokensPerSec": 115,
-    "latencyFirstChunkSec": 9.07
+    "medianTokensPerSec": 117,
+    "latencyFirstChunkSec": 9.33
   },
   {
     "model": "Grok 4.3 (low)",
@@ -1509,8 +1607,8 @@ const rawData = [
     "outputPrice": 2.50,
     "cacheRead": 0.20,
     "cacheWrite": 1.25,
-    "medianTokensPerSec": 115,
-    "latencyFirstChunkSec": 6.44
+    "medianTokensPerSec": 114,
+    "latencyFirstChunkSec": 4.94
   },
   {
     "model": "MiMo-V2-Omni",
@@ -1537,11 +1635,11 @@ const rawData = [
     "outputPrice": 9.00,
     "cacheRead": 0.15,
     "cacheWrite": null,
-    "medianTokensPerSec": 185,
-    "latencyFirstChunkSec": 0.95
+    "medianTokensPerSec": 184,
+    "latencyFirstChunkSec": 1.02
   },
   {
-    "model": "Claude Sonnet 4.6 (Non-reasoning, Low Effort)",
+    "model": "Claude Sonnet 4.6 (Non-reasoning, low)",
     "contextWindow": "1M",
     "creator": "Anthropic",
     "license": "Proprietary",
@@ -1551,8 +1649,8 @@ const rawData = [
     "outputPrice": 15.00,
     "cacheRead": 0.30,
     "cacheWrite": 3.75,
-    "medianTokensPerSec": 49,
-    "latencyFirstChunkSec": 1.53
+    "medianTokensPerSec": 43,
+    "latencyFirstChunkSec": 2.18
   },
   {
     "model": "Muse Glimmer (high)",
@@ -1565,8 +1663,8 @@ const rawData = [
     "outputPrice": 1.35,
     "cacheRead": 0.04,
     "cacheWrite": null,
-    "medianTokensPerSec": 103,
-    "latencyFirstChunkSec": 0.82
+    "medianTokensPerSec": 106,
+    "latencyFirstChunkSec": 0.79
   },
   {
     "model": "A.X-K2",
@@ -1583,7 +1681,7 @@ const rawData = [
     "latencyFirstChunkSec": null
   },
   {
-    "model": "GLM-5.2",
+    "model": "GLM-5.2 (Non-reasoning)",
     "contextWindow": "1M",
     "creator": "Z AI",
     "license": "Open",
@@ -1593,8 +1691,8 @@ const rawData = [
     "outputPrice": 4.40,
     "cacheRead": 0.23,
     "cacheWrite": null,
-    "medianTokensPerSec": 101,
-    "latencyFirstChunkSec": 2.14
+    "medianTokensPerSec": 103,
+    "latencyFirstChunkSec": 1.97
   },
   {
     "model": "Qwen3.8 27B",
@@ -1607,8 +1705,8 @@ const rawData = [
     "outputPrice": 3.00,
     "cacheRead": 0.05,
     "cacheWrite": null,
-    "medianTokensPerSec": 55,
-    "latencyFirstChunkSec": 3.65
+    "medianTokensPerSec": 50,
+    "latencyFirstChunkSec": 3.87
   },
   {
     "model": "GPT-5.6 Terra (Non-reasoning)",
@@ -1621,8 +1719,8 @@ const rawData = [
     "outputPrice": 12.00,
     "cacheRead": 0.20,
     "cacheWrite": 2.50,
-    "medianTokensPerSec": 103,
-    "latencyFirstChunkSec": 0.89
+    "medianTokensPerSec": 92,
+    "latencyFirstChunkSec": 0.77
   },
   {
     "model": "Qwen3.5 397B A17B",
@@ -1635,8 +1733,8 @@ const rawData = [
     "outputPrice": 3.60,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 95,
-    "latencyFirstChunkSec": 2.31
+    "medianTokensPerSec": 87,
+    "latencyFirstChunkSec": 2.17
   },
   {
     "model": "MiMo-V2-Flash (Feb 2026)",
@@ -1677,8 +1775,8 @@ const rawData = [
     "outputPrice": 2.95,
     "cacheRead": 0.01,
     "cacheWrite": null,
-    "medianTokensPerSec": 42,
-    "latencyFirstChunkSec": 2.85
+    "medianTokensPerSec": 40,
+    "latencyFirstChunkSec": 2.78
   },
   {
     "model": "GPT-5.6 Luna (low)",
@@ -1691,8 +1789,8 @@ const rawData = [
     "outputPrice": 1.20,
     "cacheRead": 0.02,
     "cacheWrite": 0.25,
-    "medianTokensPerSec": 111,
-    "latencyFirstChunkSec": 1.62
+    "medianTokensPerSec": 112,
+    "latencyFirstChunkSec": 1.76
   },
   {
     "model": "KAT-Coder-Pro V2",
@@ -1700,13 +1798,13 @@ const rawData = [
     "creator": "KwaiKAT",
     "license": "Proprietary",
     "artificialAnalysisIntelligenceIndex": 34,
-    "blended": 0.30,
-    "inputPrice": 1.20,
-    "outputPrice": 0.06,
-    "cacheRead": null,
+    "blended": null,
+    "inputPrice": 0.30,
+    "outputPrice": 1.20,
+    "cacheRead": 0.06,
     "cacheWrite": null,
-    "medianTokensPerSec": 100,
-    "latencyFirstChunkSec": 1.38
+    "medianTokensPerSec": null,
+    "latencyFirstChunkSec": null
   },
   {
     "model": "Qwen3.5 122B A10B",
@@ -1719,11 +1817,11 @@ const rawData = [
     "outputPrice": 3.20,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 133,
-    "latencyFirstChunkSec": 2.33
+    "medianTokensPerSec": 132,
+    "latencyFirstChunkSec": 2.32
   },
   {
-    "model": "Qwen3.5 397B A17B",
+    "model": "Qwen3.5 397B A17B (Non-reasoning)",
     "contextWindow": "262k",
     "creator": "Alibaba",
     "license": "Open",
@@ -1733,8 +1831,8 @@ const rawData = [
     "outputPrice": 3.60,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 89,
-    "latencyFirstChunkSec": 2.32
+    "medianTokensPerSec": 85,
+    "latencyFirstChunkSec": 2.27
   },
   {
     "model": "Qwen3.6 35B A3B",
@@ -1748,10 +1846,10 @@ const rawData = [
     "cacheRead": null,
     "cacheWrite": null,
     "medianTokensPerSec": 123,
-    "latencyFirstChunkSec": 2.09
+    "latencyFirstChunkSec": 2.06
   },
   {
-    "model": "DeepSeek V4 Pro",
+    "model": "DeepSeek V4 Pro (Non-reasoning)",
     "contextWindow": "1M",
     "creator": "DeepSeek",
     "license": "Open",
@@ -1761,8 +1859,8 @@ const rawData = [
     "outputPrice": 0.87,
     "cacheRead": 0.00,
     "cacheWrite": null,
-    "medianTokensPerSec": 70,
-    "latencyFirstChunkSec": 1.63
+    "medianTokensPerSec": 51,
+    "latencyFirstChunkSec": 1.61
   },
   {
     "model": "Ring-2.6-1T",
@@ -1775,8 +1873,8 @@ const rawData = [
     "outputPrice": 2.50,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 129,
-    "latencyFirstChunkSec": 3.86
+    "medianTokensPerSec": 128,
+    "latencyFirstChunkSec": 3.99
   },
   {
     "model": "Qwen3.5 Omni Plus",
@@ -1789,11 +1887,11 @@ const rawData = [
     "outputPrice": 4.80,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 132,
-    "latencyFirstChunkSec": 2.08
+    "medianTokensPerSec": 130,
+    "latencyFirstChunkSec": 2.01
   },
   {
-    "model": "Qwen3.6 27B",
+    "model": "Qwen3.6 27B (Non-reasoning)",
     "contextWindow": "262k",
     "creator": "Alibaba",
     "license": "Open",
@@ -1803,8 +1901,8 @@ const rawData = [
     "outputPrice": 3.60,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 57,
-    "latencyFirstChunkSec": 3.78
+    "medianTokensPerSec": 53,
+    "latencyFirstChunkSec": 3.66
   },
   {
     "model": "o3",
@@ -1817,8 +1915,8 @@ const rawData = [
     "outputPrice": 8.00,
     "cacheRead": 0.50,
     "cacheWrite": null,
-    "medianTokensPerSec": 118,
-    "latencyFirstChunkSec": 8.99
+    "medianTokensPerSec": 117,
+    "latencyFirstChunkSec": 6.84
   },
   {
     "model": "K-EXAONE 2.0",
@@ -1845,8 +1943,8 @@ const rawData = [
     "outputPrice": 1.15,
     "cacheRead": 0.04,
     "cacheWrite": null,
-    "medianTokensPerSec": 87,
-    "latencyFirstChunkSec": 2.80
+    "medianTokensPerSec": 99,
+    "latencyFirstChunkSec": 2.91
   },
   {
     "model": "Mistral Medium 3.5",
@@ -1859,8 +1957,8 @@ const rawData = [
     "outputPrice": 7.50,
     "cacheRead": 0.15,
     "cacheWrite": null,
-    "medianTokensPerSec": 142,
-    "latencyFirstChunkSec": 2.24
+    "medianTokensPerSec": 137,
+    "latencyFirstChunkSec": 2.22
   },
   {
     "model": "Claude 4.5 Haiku",
@@ -1868,13 +1966,13 @@ const rawData = [
     "creator": "Anthropic",
     "license": "Proprietary",
     "artificialAnalysisIntelligenceIndex": 30,
-    "blended": null,
+    "blended": 0.22,
     "inputPrice": 1.00,
     "outputPrice": 5.00,
     "cacheRead": 0.10,
     "cacheWrite": 1.25,
-    "medianTokensPerSec": 119,
-    "latencyFirstChunkSec": 17.25
+    "medianTokensPerSec": 96,
+    "latencyFirstChunkSec": 27.03
   },
   {
     "model": "Gemma 4 31B",
@@ -1888,10 +1986,10 @@ const rawData = [
     "cacheRead": null,
     "cacheWrite": null,
     "medianTokensPerSec": 35,
-    "latencyFirstChunkSec": 1.06
+    "latencyFirstChunkSec": 1.11
   },
   {
-    "model": "DeepSeek V4 Flash",
+    "model": "DeepSeek V4 Flash (Non-reasoning)",
     "contextWindow": "1M",
     "creator": "DeepSeek",
     "license": "Open",
@@ -1915,8 +2013,8 @@ const rawData = [
     "outputPrice": 30.00,
     "cacheRead": 0.50,
     "cacheWrite": null,
-    "medianTokensPerSec": 148,
-    "latencyFirstChunkSec": 1.20
+    "medianTokensPerSec": 120,
+    "latencyFirstChunkSec": 1.10
   },
   {
     "model": "JT-35B-Flash",
@@ -1933,7 +2031,7 @@ const rawData = [
     "latencyFirstChunkSec": null
   },
   {
-    "model": "MiMo-V2.5-Pro",
+    "model": "MiMo-V2.5-Pro (Non-reasoning)",
     "contextWindow": "1M",
     "creator": "Xiaomi",
     "license": "Open",
@@ -1943,11 +2041,11 @@ const rawData = [
     "outputPrice": 0.87,
     "cacheRead": 0.00,
     "cacheWrite": null,
-    "medianTokensPerSec": 37,
-    "latencyFirstChunkSec": 6.93
+    "medianTokensPerSec": 34,
+    "latencyFirstChunkSec": 3.40
   },
   {
-    "model": "Qwen3.5 122B A10B",
+    "model": "Qwen3.5 122B A10B (Non-reasoning)",
     "contextWindow": "262k",
     "creator": "Alibaba",
     "license": "Open",
@@ -1958,7 +2056,7 @@ const rawData = [
     "cacheRead": null,
     "cacheWrite": null,
     "medianTokensPerSec": 147,
-    "latencyFirstChunkSec": 2.31
+    "latencyFirstChunkSec": 2.32
   },
   {
     "model": "GPT-5.6 Luna (Non-reasoning)",
@@ -1971,8 +2069,8 @@ const rawData = [
     "outputPrice": 1.20,
     "cacheRead": 0.02,
     "cacheWrite": 0.25,
-    "medianTokensPerSec": 108,
-    "latencyFirstChunkSec": 0.86
+    "medianTokensPerSec": 125,
+    "latencyFirstChunkSec": 0.75
   },
   {
     "model": "Doubao Seed Code",
@@ -2014,10 +2112,10 @@ const rawData = [
     "cacheRead": null,
     "cacheWrite": null,
     "medianTokensPerSec": 142,
-    "latencyFirstChunkSec": 1.79
+    "latencyFirstChunkSec": 1.90
   },
   {
-    "model": "MiMo-V2-Flash",
+    "model": "MiMo-V2-Flash (Non-reasoning)",
     "contextWindow": "256k",
     "creator": "Xiaomi",
     "license": "Open",
@@ -2041,11 +2139,11 @@ const rawData = [
     "outputPrice": 2.50,
     "cacheRead": 0.20,
     "cacheWrite": 1.25,
-    "medianTokensPerSec": 112,
-    "latencyFirstChunkSec": 0.72
+    "medianTokensPerSec": 101,
+    "latencyFirstChunkSec": 0.74
   },
   {
-    "model": "Qwen3.6 35B A3B",
+    "model": "Qwen3.6 35B A3B (Non-reasoning)",
     "contextWindow": "262k",
     "creator": "Alibaba",
     "license": "Open",
@@ -2055,8 +2153,8 @@ const rawData = [
     "outputPrice": 2.25,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 137,
-    "latencyFirstChunkSec": 2.04
+    "medianTokensPerSec": 136,
+    "latencyFirstChunkSec": 2.07
   },
   {
     "model": "Ling 3.0 Tiny",
@@ -2069,11 +2167,11 @@ const rawData = [
     "outputPrice": 0.00,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 154,
-    "latencyFirstChunkSec": 2.64
+    "medianTokensPerSec": 161,
+    "latencyFirstChunkSec": 2.60
   },
   {
-    "model": "Qwen3.5 35B A3B",
+    "model": "Qwen3.5 35B A3B (Non-reasoning)",
     "contextWindow": "262k",
     "creator": "Alibaba",
     "license": "Open",
@@ -2083,11 +2181,11 @@ const rawData = [
     "outputPrice": 2.00,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 169,
-    "latencyFirstChunkSec": 2.03
+    "medianTokensPerSec": 168,
+    "latencyFirstChunkSec": 2.07
   },
   {
-    "model": "Claude 4.5 Haiku",
+    "model": "Claude 4.5 Haiku (Non-reasoning)",
     "contextWindow": "200k",
     "creator": "Anthropic",
     "license": "Proprietary",
@@ -2097,8 +2195,8 @@ const rawData = [
     "outputPrice": 5.00,
     "cacheRead": 0.10,
     "cacheWrite": 1.25,
-    "medianTokensPerSec": 99,
-    "latencyFirstChunkSec": 0.79
+    "medianTokensPerSec": 86,
+    "latencyFirstChunkSec": 0.75
   },
   {
     "model": "gpt-oss-120b (high)",
@@ -2111,8 +2209,22 @@ const rawData = [
     "outputPrice": 0.60,
     "cacheRead": 0.15,
     "cacheWrite": null,
-    "medianTokensPerSec": 157,
-    "latencyFirstChunkSec": 0.88
+    "medianTokensPerSec": 172,
+    "latencyFirstChunkSec": 0.83
+  },
+  {
+    "model": "Granite 4.2 30B",
+    "contextWindow": "131k",
+    "creator": "IBM",
+    "license": "Open",
+    "artificialAnalysisIntelligenceIndex": 24,
+    "blended": 0.03,
+    "inputPrice": 0.16,
+    "outputPrice": 0.65,
+    "cacheRead": 0.04,
+    "cacheWrite": null,
+    "medianTokensPerSec": 75,
+    "latencyFirstChunkSec": 0.81
   },
   {
     "model": "Nemotron 3.5 Lightning",
@@ -2125,8 +2237,8 @@ const rawData = [
     "outputPrice": 0.22,
     "cacheRead": 0.05,
     "cacheWrite": null,
-    "medianTokensPerSec": 302,
-    "latencyFirstChunkSec": 0.93
+    "medianTokensPerSec": 309,
+    "latencyFirstChunkSec": 0.90
   },
   {
     "model": "Command A+",
@@ -2139,8 +2251,8 @@ const rawData = [
     "outputPrice": 0.00,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 254,
-    "latencyFirstChunkSec": 0.39
+    "medianTokensPerSec": 246,
+    "latencyFirstChunkSec": 0.41
   },
   {
     "model": "K-EXAONE",
@@ -2171,7 +2283,7 @@ const rawData = [
     "latencyFirstChunkSec": null
   },
   {
-    "model": "Gemma 4 31B",
+    "model": "Gemma 4 31B (Non-reasoning)",
     "contextWindow": "256k",
     "creator": "Google",
     "license": "Open",
@@ -2181,8 +2293,8 @@ const rawData = [
     "outputPrice": 0.40,
     "cacheRead": 0.14,
     "cacheWrite": null,
-    "medianTokensPerSec": 83,
-    "latencyFirstChunkSec": 1.35
+    "medianTokensPerSec": 60,
+    "latencyFirstChunkSec": 1.39
   },
   {
     "model": "Gemma 4 12B",
@@ -2195,8 +2307,8 @@ const rawData = [
     "outputPrice": 0.30,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 110,
-    "latencyFirstChunkSec": 2.28
+    "medianTokensPerSec": 107,
+    "latencyFirstChunkSec": 2.40
   },
   {
     "model": "Nova 2.0 Pro Preview (medium)",
@@ -2209,8 +2321,8 @@ const rawData = [
     "outputPrice": 10.00,
     "cacheRead": 0.31,
     "cacheWrite": null,
-    "medianTokensPerSec": 118,
-    "latencyFirstChunkSec": 17.30
+    "medianTokensPerSec": 117,
+    "latencyFirstChunkSec": 10.69
   },
   {
     "model": "Mercury 2",
@@ -2223,8 +2335,8 @@ const rawData = [
     "outputPrice": 0.75,
     "cacheRead": 0.03,
     "cacheWrite": null,
-    "medianTokensPerSec": 1005,
-    "latencyFirstChunkSec": 3.63
+    "medianTokensPerSec": 684,
+    "latencyFirstChunkSec": 4.01
   },
   {
     "model": "Qwen3.5 9B",
@@ -2237,8 +2349,8 @@ const rawData = [
     "outputPrice": 0.20,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 76,
-    "latencyFirstChunkSec": 2.17
+    "medianTokensPerSec": 88,
+    "latencyFirstChunkSec": 2.01
   },
   {
     "model": "Qwen3 Coder Next",
@@ -2251,8 +2363,8 @@ const rawData = [
     "outputPrice": 1.20,
     "cacheRead": 0.35,
     "cacheWrite": null,
-    "medianTokensPerSec": 109,
-    "latencyFirstChunkSec": 1.30
+    "medianTokensPerSec": 145,
+    "latencyFirstChunkSec": 1.16
   },
   {
     "model": "Nova 2.0 Omni (medium)",
@@ -2293,11 +2405,11 @@ const rawData = [
     "outputPrice": 2.50,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 161,
-    "latencyFirstChunkSec": 17.20
+    "medianTokensPerSec": 155,
+    "latencyFirstChunkSec": 15.22
   },
   {
-    "model": "Qwen3.5 9B",
+    "model": "Qwen3.5 9B (Non-reasoning)",
     "contextWindow": "262k",
     "creator": "Alibaba",
     "license": "Open",
@@ -2307,8 +2419,8 @@ const rawData = [
     "outputPrice": 0.25,
     "cacheRead": null,
     "cacheWrite": null,
-    "medianTokensPerSec": 93,
-    "latencyFirstChunkSec": 0.80
+    "medianTokensPerSec": 98,
+    "latencyFirstChunkSec": 0.87
   },
   {
     "model": "EXAONE 4.5 33B",
