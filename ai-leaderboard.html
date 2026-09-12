@@ -163,6 +163,22 @@
             accent-color: #6366f1;
             cursor: pointer;
         }
+
+        /* Open-only toggle */
+        .toggle-pill {
+            cursor: pointer;
+            transition: border-color 0.15s ease, background-color 0.15s ease;
+        }
+
+        .toggle-pill input[type="checkbox"] {
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+
+        .toggle-pill.active {
+            border-color: #6366f1;
+            background-color: rgba(99, 102, 241, 0.08);
+        }
     </style>
 </head>
 
@@ -313,6 +329,20 @@
                         <option value="61">61</option>
                     </select>
                 </div>
+
+                <!-- Open models only toggle -->
+                <label
+                    id="open-only-pill"
+                    class="toggle-pill px-4 py-2 bg-slate-900 border border-slate-700 rounded-3xl flex items-center gap-x-2 text-xs"
+                >
+                    <input
+                        type="checkbox"
+                        id="open-only"
+                        onchange="filterAndRender(); updateOpenPill()"
+                    >
+                    <span class="text-slate-400">Open Models Only</span>
+                    <i class="fa-solid fa-lock-open text-emerald-400 text-[10px]"></i>
+                </label>
 
                 <!-- Maximum Cost filter -->
                 <div
@@ -2416,6 +2446,17 @@ const rawData = [
             filterAndRender();
         }
 
+        function updateOpenPill() {
+            const pill = document.getElementById('open-only-pill');
+            const checkbox = document.getElementById('open-only');
+
+            if (checkbox.checked) {
+                pill.classList.add('active');
+            } else {
+                pill.classList.remove('active');
+            }
+        }
+
         function filterAndRender() {
             const searchTerm = document
                 .getElementById('search-input')
@@ -2429,6 +2470,9 @@ const rawData = [
                 minimumIntelligenceValue === 'avg-intelligence'
                     ? avgIntelligenceAll
                     : Number.parseInt(minimumIntelligenceValue, 10) || 0;
+
+            const openOnly =
+                document.getElementById('open-only').checked;
 
             const maximumCostRaw = document
                 .getElementById('max-cost')
@@ -2449,7 +2493,8 @@ const rawData = [
 
             let filtered = models.filter(
                 model =>
-                    model.intelligenceNumeric >= minimumIntelligence
+                    model.intelligenceNumeric >= minimumIntelligence &&
+                    (!openOnly || model.license === 'Open')
             );
 
             if (costFilterActive) {
@@ -2608,6 +2653,8 @@ const rawData = [
 
             document.getElementById('search-input').value = '';
             document.getElementById('min-intel').value = '0';
+            document.getElementById('open-only').checked = false;
+            updateOpenPill();
             document.getElementById('max-cost').value = '';
             document.getElementById('cost-filter-input').checked = true;
             document.getElementById('cost-filter-output').checked = false;
